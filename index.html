@@ -398,19 +398,28 @@ a{color:inherit;text-decoration:none}
   /* ── smooth inertia scroll ── */
   let targetY = window.scrollY;
   let currentY = window.scrollY;
-  const SMOOTH = 0.14;
+  let velocity = 0;
+  const SMOOTH = 0.28;
+  const DAMP = 0.88;
+  const VEL_CAP = 120;
   let ticking = false;
   let scrollLocked = false;
+  let lastTouchTime = 0;
+  let touchVelY = 0;
 
   function scrollTick() {
     const dy = targetY - currentY;
-    if (Math.abs(dy) < 0.3) {
+    velocity *= DAMP;
+    if (Math.abs(dy) > 0.3) {
+      currentY += dy * SMOOTH;
+    } else if (Math.abs(velocity) < 0.3) {
       currentY = targetY;
       window.scrollTo(0, Math.round(currentY));
       ticking = false;
       return;
     }
-    currentY += dy * SMOOTH;
+    currentY += velocity;
+    currentY = Math.max(0, Math.min(currentY, document.documentElement.scrollHeight - window.innerHeight));
     window.scrollTo(0, Math.round(currentY));
     requestAnimationFrame(scrollTick);
   }
@@ -422,32 +431,48 @@ a{color:inherit;text-decoration:none}
     }
   }
 
+  function clampTarget() {
+    targetY = Math.max(0, Math.min(targetY, document.documentElement.scrollHeight - window.innerHeight));
+  }
+
   /* intercept scroll events */
   function onWheel(e) {
     e.preventDefault();
+    velocity += e.deltaY * 0.4;
+    velocity = Math.max(-VEL_CAP, Math.min(VEL_CAP, velocity));
     targetY += e.deltaY;
-    targetY = Math.max(0, Math.min(targetY, document.documentElement.scrollHeight - window.innerHeight));
+    clampTarget();
     kickScroll();
   }
-  function onTouchStart(e) { scrollLocked = true; }
+  function onTouchStartY(e) {
+    scrollLocked = true;
+    velocity = 0;
+    const touch = e.touches[0];
+    if (!touch) return;
+    lastTouchY = touch.clientY;
+    lastTouchTime = performance.now();
+    touchVelY = 0;
+  }
   function onTouchMove(e) {
     if (!scrollLocked) return;
     const touch = e.touches[0];
     if (!touch) return;
     e.preventDefault();
-    targetY -= touch.clientY - lastTouchY;
+    const now = performance.now();
+    const dt = Math.max(1, now - lastTouchTime);
+    const dy = lastTouchY - touch.clientY;
+    touchVelY = dy / dt * 16;
+    targetY += dy;
     lastTouchY = touch.clientY;
-    targetY = Math.max(0, Math.min(targetY, document.documentElement.scrollHeight - window.innerHeight));
+    lastTouchTime = now;
+    clampTarget();
     kickScroll();
   }
-  function onTouchEnd() { scrollLocked = false; }
-
-  let lastTouchY = 0;
-  function onTouchStartY(e) {
-    const touch = e.touches[0];
-    if (!touch) return;
-    lastTouchY = touch.clientY;
-    onTouchStart(e);
+  function onTouchEnd() {
+    scrollLocked = false;
+    velocity += touchVelY * 2.5;
+    velocity = Math.max(-VEL_CAP, Math.min(VEL_CAP, velocity));
+    kickScroll();
   }
 
   document.addEventListener('wheel', onWheel, { passive: false });
