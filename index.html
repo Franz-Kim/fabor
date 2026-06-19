@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>FABOR — My Favorite Fabricated Things</title>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+:root {
+  --bg:      oklch(97.5% 0.002 240);
+  --surface: oklch(100% 0 0);
+  --fg:      oklch(9% 0.01 250);
+  --fg-soft: oklch(26% 0.006 250);
+  --muted:   oklch(46% 0.005 250);
+  --accent:  oklch(46% 0.13 260);
+  --font: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --pad: clamp(1.15rem, 3.6vw, 2.8rem);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{
+  background:var(--bg);color:var(--fg);
+  font-family:var(--font);font-weight:350;line-height:1.6;
+  overflow-x:hidden
+}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+
+/* ── lightbox ── */
+.lightbox{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s ease;cursor:zoom-out;padding:clamp(1rem,3vw,2.5rem)}
+.lightbox.open{opacity:1;pointer-events:auto}
+.lightbox img{max-width:100%;max-height:100%;object-fit:contain;border-radius:0;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.page{position:relative;z-index:1;width:100%}
+
+.display-1{
+  font-size:clamp(0.95rem,2.8vw,1.6rem);font-weight:700;
+  line-height:1.2;letter-spacing:-0.025em;word-break:keep-all
+}
+@media(min-width:1024px){.display-1{font-size:clamp(0.95rem,2.8vw,2rem)}}
+.display-2{
+  font-size:clamp(0.88rem,2.2vw,1.3rem);font-weight:350;
+  line-height:1.25;letter-spacing:-0.01em;word-break:keep-all
+}
+.body-text{
+  font-size:clamp(0.72rem,1.05vw,0.82rem);font-weight:350;
+  line-height:1.75;color:var(--fg-soft);word-break:keep-all;
+  letter-spacing:-0.005em
+}
+@media(min-width:1024px){.body-text{font-size:clamp(0.72rem,1.05vw,0.95rem)}}
+.body-text strong{font-weight:600;color:var(--fg)}
+.caption{
+  font-size:clamp(0.5rem,0.62vw,0.6rem);font-weight:500;
+  letter-spacing:0.08em;text-transform:uppercase
+}
+.kicker{
+  font-size:clamp(0.45rem,0.55vw,0.55rem);font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)
+}
+
+/* ── reveal: scroll-in with rollback ── */
+.r{
+  will-change:transform,opacity;
+  opacity:0;
+  transform:translateY(var(--float-y,36px));
+  transition:
+    opacity var(--fade-dur,1.6s) cubic-bezier(0.25,1,0.5,1),
+    transform var(--float-dur,1.6s) cubic-bezier(0.25,1,0.5,1),
+    filter 0.4s ease
+}
+.r.visible{opacity:1;transform:translateY(0)}
+.click-img{cursor:zoom-in;display:flex;flex-direction:column}
+.click-img:hover{filter:brightness(0.92)}
+.click-img:active{filter:brightness(0.85)}
+/* ── varied spacers — text→image half width, image→image wide + scattered ── */
+.sp-xs{height:clamp(0.5rem,1vw,0.8rem)}
+.sp-sm{height:clamp(2rem,6vw,5rem)}
+.sp-md{height:clamp(4rem,10vw,8rem)}
+.sp-lg{height:clamp(5rem,14vw,12rem)}
+.sp-xl{height:clamp(8rem,18vw,16rem)}
+.sp-xx{height:clamp(11rem,24vw,20rem)}
+
+/* ═══ HERO ═══ */
+.hero{
+  position:relative;min-height:100dvh;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:var(--pad);padding-top:clamp(3.2rem,9vh,6.5rem);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,0.55) 0%,
+      rgba(0,0,0,0.2) 35%,
+      rgba(0,0,0,0.08) 65%,
+      rgba(0,0,0,0.55) 100%
+    ),
+    var(--hero-bg, url('images/webp/IMG_0112.webp')) center / cover no-repeat;
+  color:#fff
+}
+.hero-top{flex:1;display:flex;flex-direction:column;justify-content:center}
+.hero-logo{max-width:clamp(130px,22vw,200px);margin-bottom:clamp(0.35rem,0.7vw,0.7rem)}
+.hero-logo img{filter:brightness(0) invert(1)}
+.hero-title{
+  font-size:clamp(0.95rem,3.2vw,1.7rem);font-weight:700;
+  line-height:1.15;letter-spacing:-0.02em;word-break:keep-all;
+  margin-bottom:clamp(0.2rem,0.4vw,0.4rem)
+}
+.hero-tag{
+  white-space:nowrap;
+  font-size:clamp(0.55rem,0.78vw,0.7rem);
+  opacity:0.7;letter-spacing:0.02em
+}
+.hero-footer{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding-bottom:clamp(0.4rem,1vh,1rem)
+}
+.hero-footer .kicker{color:rgba(255,255,255,0.5)}
+
+/* ═══ LANGUAGE TOGGLE ═══ */
+.lang-toggle{
+  position:fixed;top:clamp(0.6rem,1.2vw,1.1rem);right:clamp(0.8rem,1.5vw,1.3rem);
+  z-index:100;display:flex;gap:1px;
+  background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-radius:2rem;padding:3px;border:1px solid rgba(255,255,255,0.12);
+  transition:background 0.3s,border-color 0.3s
+}
+.lang-toggle button{
+  background:transparent;border:0;color:rgba(255,255,255,0.5);
+  font-family:var(--font);font-size:clamp(0.5rem,0.62vw,0.6rem);
+  font-weight:500;padding:clamp(0.18rem,0.3vw,0.3rem) clamp(0.45rem,0.6vw,0.65rem);
+  border-radius:2rem;cursor:pointer;transition:all 0.25s;letter-spacing:0.08em
+}
+.lang-toggle button.active{background:rgba(255,255,255,0.2);color:#fff}
+
+/* ═══ IMAGES ═══ */
+
+.img-full{width:100vw;margin-left:calc(var(--pad)*-1)}
+.img-full img{width:100%;height:clamp(22vh,50vw,70vh);object-fit:cover}
+.img-wide{width:min(85%,920px);margin:0 auto}
+.img-wide img{width:100%;height:clamp(24vh,38vw,60vh);object-fit:cover}
+.img-med{width:min(58%,560px)}
+.img-med img{width:100%;height:clamp(18vh,30vw,52vh);object-fit:cover}
+.img-3col{display:flex;flex-direction:column;gap:clamp(4rem,12vw,10rem);width:100vw;margin-left:calc(var(--pad)*-1)}
+.img-3col img{width:100%;height:clamp(20vh,36vw,56vh);object-fit:cover}
+.img-left{margin-left:calc(var(--pad)*-0.1)}
+.img-right{margin-left:auto;margin-right:calc(var(--pad)*-0.1)}
+
+/* ═══ IMAGE CAPTION ═══ */
+.img-cap{
+  display:block;margin-top:clamp(4px,0.4vw,6px);
+  font-size:clamp(0.42rem,0.5vw,0.54rem);font-weight:350;letter-spacing:0.01em;
+  color:oklch(58% 0.004 250);pointer-events:none
+}
+.img-full .img-cap,.img-3col .img-cap{padding-inline:var(--pad)}
+.img-full .img-cap,.img-left .img-cap,.img-right .img-cap{text-align:right;width:100%;box-sizing:border-box}
+
+/* ═══ TEXT BLOCK ═══ */
+.text-block{max-width:min(480px,82vw);margin:0 auto;padding:0 var(--pad)}
+.text-block p{margin-bottom:0.6em}
+.text-block p:last-child{margin-bottom:0}
+.text-block .lead{font-size:clamp(0.78rem,1.1vw,0.9rem);font-weight:500;color:var(--fg);margin-bottom:0.8em}
+
+/* ═══ STATEMENT + CONTACT ═══ */
+.statement-wrap{
+  text-align:center;padding:clamp(2rem,4vw,3.5rem) var(--pad) clamp(1.5rem,3vw,2.5rem);
+  display:flex;flex-direction:column;align-items:center
+}
+.statement-wrap .contact-intro{
+  font-size:clamp(0.62rem,0.8vw,0.72rem);font-weight:400;
+  color:var(--fg-soft);letter-spacing:-0.005em;line-height:1.65;
+  margin:clamp(1.5rem,2.5vw,2.2rem) auto clamp(0.8rem,1.2vw,1.2rem);
+  max-width:320px
+}
+.statement-wrap .logo-mini{
+  max-width:clamp(72px,10vw,110px);
+  margin:clamp(1.5rem,2.8vw,2.4rem) auto clamp(0.8rem,1.2vw,1.2rem)
+}
+.statement-wrap .logo-mini img{filter:brightness(0)}
+.statement-wrap .contact-email{
+  font-size:clamp(0.68rem,0.9vw,0.78rem);font-weight:350;color:var(--fg);
+  letter-spacing:-0.005em;margin-bottom:clamp(0.6rem,1.2vw,1rem);word-break:break-all
+}
+.statement-wrap .contact-insta{
+  display:inline-flex;align-items:center;gap:0.45rem;
+  padding:clamp(0.36rem,0.6vw,0.5rem) clamp(0.8rem,1.2vw,1.1rem);
+  border:1px solid var(--fg);border-radius:2rem;
+  font-size:clamp(0.58rem,0.75vw,0.7rem);font-weight:400;letter-spacing:0.02em;color:var(--fg);
+  transition:background 0.3s,color 0.3s
+}
+.statement-wrap .contact-insta:hover{background:var(--fg);color:var(--surface)}
+.statement-wrap .contact-insta .arrow{
+  display:inline-block;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1)
+}
+.statement-wrap .contact-insta:hover .arrow{transform:translateX(4px)}
+
+/* ═══ FOOTER ═══ */
+.site-footer{
+  text-align:center;
+  padding:clamp(1.2rem,2vw,2rem) var(--pad) clamp(1.5rem,2.5vw,2.5rem);
+  border-top:1px solid var(--border, oklch(90% 0.004 250));
+}
+.site-footer p{
+  font-size:clamp(0.48rem,0.6vw,0.58rem);font-weight:400;
+  color:var(--muted);letter-spacing:0.04em
+}
+
+@media(max-width:480px){
+  .hero-logo{max-width:110px}
+  .img-med{width:min(68%,100%)}
+  .img-left,.img-right{margin-left:0;margin-right:0}
+}
+@media(min-width:1024px){
+  .img-full img{height:clamp(50vh,38vw,85vh)}
+  .img-wide img{height:clamp(36vh,32vw,72vh)}
+  .img-med img{height:clamp(28vh,26vw,64vh)}
+  .sp-xs{height:clamp(0.5rem,1.5vw,1rem)}
+  .sp-sm{height:clamp(3rem,8vw,7rem)}
+  .sp-md{height:clamp(5rem,12vw,10rem)}
+  .sp-lg{height:clamp(7rem,16vw,14rem)}
+  .sp-xl{height:clamp(10rem,20vw,18rem)}
+  .sp-xx{height:clamp(14rem,28vw,24rem)}
+  .hero-title{font-size:clamp(1.24rem,4.16vw,3.12rem)}
+  .hero-tag{font-size:clamp(0.72rem,1.01vw,1.17rem)}
+  .text-block .lead{font-size:clamp(1.01rem,1.43vw,1.37rem)}
+  .display-1{font-size:clamp(1.24rem,3.64vw,2.6rem)}
+  .body-text{font-size:clamp(0.94rem,1.37vw,1.24rem)}
+  .img-cap{font-size:clamp(0.52rem,0.72vw,0.64rem)}
+  .img-right .img-cap{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ LANGUAGE TOGGLE ═══ -->
+  <div class="lang-toggle" role="group" aria-label="Language">
+    <button type="button" data-lang="ko" class="active">KR</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-top">
+      <div class="hero-logo r" data-delay="0">
+<img src="images/logo-fabor.png" alt="FABOR" width="110" height="38" />
+      </div>
+      <div class="hero-title r" data-delay="0.1" data-i18n="hero_subtitle">공학적 공예의 언어</div>
+      <div class="hero-tag r" data-delay="0.2">My Favorite Fabricated Things</div>
+    </div>
+    <div class="hero-footer r" data-delay="0.35">
+      <span class="kicker">3D PRINT · CRAFT · DESIGN</span>
+      <span class="kicker" data-i18n="scroll">↓ SCROLL</span>
+    </div>
+  </section>
+
+  <div class="sp-md"></div>
+
+  <!-- ═══ TEXT 1 — 회전 대칭 탈피 ═══ -->
+  <div class="text-block r" data-delay="0">
+    <p class="body-text" data-i18n="t1_a">
+파보르는 3D프린터를 입체물을 쌓는 기계가 아닌<br />
+<strong>현대의 정밀한 방직기로 해석</strong>하며,<br />
+기술을 섬세한 공예의 언어로 치환합니다.<br />
+획일적인 <strong>회전 대칭적 조형을 벗어나</strong><br />
+얇고 정교한 패턴의 레이어를 직조하듯 출력하여<br />
+차별화된 시각 경험을 제안합니다.
+    </p>
+
+  </div>
+
+  <div class="sp-lg"></div>
+
+  <!-- ═══ IMAGE ── exhibitionwork1 ═══ -->
+  <div class="img-full r click-img" data-delay="0.06" data-caption="무아레 조명 2026">
+    <img src="images/webp/exhibitionwork1.webp" alt="" />
+<span class="img-cap" data-i18n="cap_01">무아레 조명 · 2026</span>
+  </div>
+
+  <div class="sp-xx"></div>
+
+  <!-- ═══ IMAGE ── jogakbo1 ═══ -->
+  <div class="img-wide r click-img" data-delay="0.12" data-caption="조각보 램프 - 갓 2025">
+    <img src="images/webp/jogakbo1.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_02">조각보 램프 - 갓 · 2025</span>
+  </div>
+
+  <div class="sp-md"></div>
+
+  <!-- ═══ TEXT 2 — part 1 (공예적 도구) ═══ -->
+  <div class="text-block r" data-delay="0">
+    <p class="body-text" data-i18n="t2_a">
+      파보르에게 3D 프린팅은 단순한 제조수단이 아니라<br />
+      빛과 질감, 패턴과 구조를 정밀하게 통제하는<br />
+      새로운 공예적 도구입니다.
+    </p>
+  </div>
+
+  <div class="sp-lg"></div>
+
+  <!-- ═══ IMAGE ── spantray2 ═══ -->
+  <div class="img-med img-right r click-img" data-delay="0.08" data-caption="스팬 트레이 2026">
+    <img src="images/webp/spantray2.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_03">스팬 트레이 · 2026</span>
+  </div>
+
+  <div class="sp-xl"></div>
+
+  <!-- ═══ TEXT 2 — part 2 (0.6mm 직물) ═══ -->
+  <div class="text-block r" data-delay="0">
+    <p class="body-text" data-i18n="t2_b">
+      <strong>0.6mm 이하</strong>로 제어된 얇고 유연한 직물 구조는<br />
+      플라스틱이라는 고정관념을 넘어<br />
+      부드러운 반투명성의 미학을 완성합니다.
+    </p>
+  </div>
+
+  <div class="sp-lg"></div>
+
+  <!-- ═══ IMAGE ── cradlewine2 ═══ -->
+  <div class="img-med img-left r click-img" data-delay="0.14" data-caption="크래들 와인스탠드 2026">
+    <img src="images/webp/cradlewine2.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_04">크래들 와인스탠드 · 2026</span>
+  </div>
+
+  <div class="sp-xx"></div>
+
+  <!-- ═══ IMAGE ── exhibitionwork2 ═══ -->
+  <div class="img-full r click-img" data-delay="0.06" data-caption="무아레 조명 2026">
+    <img src="images/webp/exhibitionwork2.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_05">무아레 조명 · 2026</span>
+  </div>
+
+  <div class="sp-xl"></div>
+
+  <!-- ═══ IMAGE ── jogakbo3 ═══ -->
+  <div class="img-wide r click-img" data-delay="0.18" data-caption="조각보 램프 - 바람 2026">
+    <img src="images/webp/jogakbo3.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_06">조각보 램프 - 바람 · 2026</span>
+  </div>
+
+  <div class="sp-lg"></div>
+
+  <!-- ═══ IMAGE ── cradlewine1 ═══ -->
+  <div class="img-med img-right r click-img" data-delay="0.1" data-caption="크래들 와인스탠드 2026">
+    <img src="images/webp/cradlewine1.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_07">크래들 와인스탠드 · 2026</span>
+  </div>
+
+  <div class="sp-xx"></div>
+
+  <!-- ═══ IMAGE ── breathroom1 ═══ -->
+  <div class="img-full r click-img" data-delay="0.08" data-caption="Breathroom 2025">
+    <img src="images/webp/breathroom1.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_08">Breathroom · 2025</span>
+  </div>
+
+  <div class="sp-xl"></div>
+
+  <!-- ═══ IMAGE ── spantray1 ═══ -->
+  <div class="img-med img-left r click-img" data-delay="0.16" data-caption="스팬 트레이 2026">
+    <img src="images/webp/spantray1.webp" alt="" />
+    <span class="img-cap" data-i18n="cap_09">스팬 트레이 · 2026</span>
+  </div>
+
+  <div class="sp-lg"></div>
+
+  <!-- ═══ FINAL STATEMENT + CONTACT ═══ -->
+  <div class="statement-wrap r" data-delay="0">
+    <div class="body-text" style="font-size:clamp(0.62rem,0.8vw,0.72rem);max-width:350px;margin:0 auto clamp(1.2rem,2vw,1.8rem);line-height:1.7;color:var(--fg-soft)" data-i18n="writer_intro">
+      파보르는 김승기 작가가 전개하는 오브제 브랜드로,<br />
+      3D프린팅을 공예적 매체로 재해석하며<br />
+      새로운 조형과 물성을 탐구합니다.
+    </div>
+    <div class="display-1" data-i18n="final">현대의 기술을<br />가장 아름답게 쓰는 일.</div>
+    <div class="logo-mini"><img src="images/logo-fabor.png" alt="FABOR" width="72" height="25" /></div>
+    <p class="contact-intro" data-i18n="contact_intro">작품 소장과 전시, 공간 협업 및 제작에 관한<br />다양한 제안을 기다립니다.</p>
+    <div class="contact-email">faborobjet@gmail.com</div>
+    <a href="https://www.instagram.com/fabor.objet/" target="_blank" rel="noopener" class="contact-insta">
+      @fabor.objet
+      <span class="arrow">&rarr;</span>
+    </a>
+  </div>
+
+</div>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lightbox" id="lightbox"><img src="" alt="" id="lightbox-img" /></div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <p>&copy; 2026 FABOR. All rights reserved.</p>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── smooth inertia scroll ── */
+  let targetY = window.scrollY;
+  let currentY = window.scrollY;
+  const SMOOTH = 0.065;
+  let ticking = false;
+  let scrollLocked = false;
+
+  function scrollTick() {
+    const dy = targetY - currentY;
+    if (Math.abs(dy) < 0.3) {
+      currentY = targetY;
+      window.scrollTo(0, Math.round(currentY));
+      ticking = false;
+      return;
+    }
+    currentY += dy * SMOOTH;
+    window.scrollTo(0, Math.round(currentY));
+    requestAnimationFrame(scrollTick);
+  }
+
+  function kickScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(scrollTick);
+    }
+  }
+
+  /* intercept scroll events */
+  function onWheel(e) {
+    e.preventDefault();
+    targetY += e.deltaY;
+    targetY = Math.max(0, Math.min(targetY, document.documentElement.scrollHeight - window.innerHeight));
+    kickScroll();
+  }
+  function onTouchStart(e) { scrollLocked = true; }
+  function onTouchMove(e) {
+    if (!scrollLocked) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    e.preventDefault();
+    targetY -= touch.clientY - lastTouchY;
+    lastTouchY = touch.clientY;
+    targetY = Math.max(0, Math.min(targetY, document.documentElement.scrollHeight - window.innerHeight));
+    kickScroll();
+  }
+  function onTouchEnd() { scrollLocked = false; }
+
+  let lastTouchY = 0;
+  function onTouchStartY(e) {
+    const touch = e.touches[0];
+    if (!touch) return;
+    lastTouchY = touch.clientY;
+    onTouchStart(e);
+  }
+
+  document.addEventListener('wheel', onWheel, { passive: false });
+  document.addEventListener('touchstart', onTouchStartY, { passive: true });
+  document.addEventListener('touchmove', onTouchMove, { passive: false });
+  document.addEventListener('touchend', onTouchEnd, { passive: true });
+
+  /* ── reveal animation — 각 요소 자연스럽게 떠오르기 ── */
+  const els = document.querySelectorAll('.r');
+  const heroEls = document.querySelectorAll('.hero .r');
+
+  for (const el of els) {
+    const isHero = el.closest && el.closest('.hero');
+    const baseDelay = parseFloat(el.dataset.delay) || 0;
+    const hasImg = el.querySelector('img');
+    const dur = isHero
+      ? 0.8 + Math.random() * 0.5
+      : hasImg
+        ? 1.8 + Math.random() * 1.4
+        : 1.0 + Math.random() * 0.6;
+    const dist = isHero
+      ? 18 + Math.random() * 20
+      : hasImg
+        ? 50 + Math.random() * 55
+        : 25 + Math.random() * 28;
+    const jit = 0.1 + Math.random() * 0.45;
+    el.style.setProperty('--fade-dur', (dur * 0.6) + 's');
+    el.style.setProperty('--float-dur', (dur * 1.5) + 's');
+    el.style.setProperty('--float-y', dist + 'px');
+    el.style.transitionDelay = (baseDelay + jit) + 's';
+  }
+
+  const obsOpts = { threshold: 0, rootMargin: '0px 0px 60px 0px' };
+
+  function showEl(el) { el.classList.add('visible'); }
+  function hideEl(el) { el.classList.remove('visible'); }
+
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        showEl(entry.target);
+      } else {
+        hideEl(entry.target);
+      }
+    }
+  }, obsOpts);
+
+  for (const el of els) {
+    if (el.closest && el.closest('.hero')) continue;
+    observer.observe(el);
+  }
+
+  requestAnimationFrame(() => {
+    for (const el of heroEls) {
+      el.classList.add('visible');
+    }
+  });
+
+  /* ── lightbox ── */
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  document.querySelectorAll('.click-img').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const img = this.tagName === 'IMG' ? this : this.querySelector('img');
+      if (!img) return;
+      lightboxImg.src = img.src;
+      lightbox.classList.add('open');
+    });
+  });
+  lightbox.addEventListener('click', function() {
+    this.classList.remove('open');
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') lightbox.classList.remove('open');
+  });
+
+  /* ── lang toggle mode ── */
+  function updateLangMode() {
+    const hero = document.getElementById('hero');
+    const toggle = document.querySelector('.lang-toggle');
+    if (!hero || !toggle) return;
+    const heroBottom = hero.offsetTop + hero.offsetHeight;
+    const scrollY = window.scrollY || window.pageYOffset;
+    toggle.style.background = scrollY < heroBottom
+      ? 'rgba(0,0,0,0.5)'
+      : 'rgba(0,0,0,0.06)';
+    toggle.style.borderColor = scrollY < heroBottom
+      ? 'rgba(255,255,255,0.12)'
+      : 'rgba(0,0,0,0.08)';
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      const isActive = btn.classList.contains('active');
+      if (scrollY < heroBottom) {
+        btn.style.background = isActive ? 'rgba(255,255,255,0.2)' : 'transparent';
+        btn.style.color = isActive ? '#fff' : 'rgba(255,255,255,0.5)';
+      } else {
+        btn.style.background = isActive ? 'rgba(0,0,0,0.08)' : 'transparent';
+        btn.style.color = isActive ? '' : '';
+      }
+    });
+  }
+  window.addEventListener('scroll', updateLangMode);
+  requestAnimationFrame(updateLangMode);
+
+  const EN = {
+    hero_subtitle: 'The Language of<br />Engineered Craft',
+    scroll: '↓ SCROLL',
+    t1_a: 'FABOR translates the cold technology of 3D printing<br />into the language of delicate craftsmanship,<br />breaking free from <strong>rotational symmetry</strong>,<br /><strong>reinterpreting the 3D printer as a modern precision loom</strong>,<br />printing thin, intricate patterned layers.',
+    t2_a: 'For FABOR, 3D printing is not merely production —<br />it is a new craft tool that precisely controls<br />light, texture, pattern, and structure.',
+    t2_b: '<strong>Sub-0.6mm</strong> thin, flexible fabric structures<br />transcend the preconception of plastic,<br />achieving an aesthetic of soft translucency.',
+    writer_intro: 'FABOR is an objet brand by artist Seungki Kim,<br />reinterpreting 3D printing as a craft medium,<br />exploring new forms and materiality.',
+    final: 'Using modern technology<br />in the most beautiful way.',
+    contact_intro: 'We welcome inquiries about<br />collecting, exhibiting, and collaborating.',
+    cap_01: 'Moiré Light · 2026',
+    cap_02: 'Jogakbo Lamp - Gat · 2025',
+    cap_03: 'Span Tray · 2026',
+    cap_04: 'Cradle Wine Stand · 2026',
+    cap_05: 'Moiré Light · 2026',
+    cap_06: 'Jogakbo Lamp - Wind · 2026',
+    cap_07: 'Cradle Wine Stand · 2026',
+    cap_08: 'Breathroom · 2025',
+    cap_09: 'Span Tray · 2026',
+  };
+  const KO = {
+    hero_subtitle: '공학적 공예의 언어',
+    scroll: '↓ SCROLL',
+    t1_a: '파보르는 3D프린터를 입체물을 쌓는 기계가 아닌<br /><strong>현대의 정밀한 방직기로 해석</strong>하며,<br />기술을 섬세한 공예의 언어로 치환합니다.<br />획일적인 <strong>회전 대칭적 조형을 벗어나</strong><br />얇고 정교한 패턴의 레이어를 직조하듯 출력하여<br />차별화된 시각 경험을 제안합니다.',
+    t2_a: '파보르에게 3D 프린팅은 단순한 제조수단이 아니라<br />빛과 질감, 패턴과 구조를 정밀하게 통제하는<br />새로운 공예적 도구입니다.',
+    t2_b: '<strong>0.6mm 이하</strong>로 제어된 얇고 유연한 직물 구조는<br />플라스틱이라는 고정관념을 넘어<br />부드러운 반투명성의 미학을 완성합니다.',
+    writer_intro: '파보르는 김승기 작가가 전개하는 오브제 브랜드로,<br />3D프린팅을 공예적 매체로 재해석하며<br />새로운 조형과 물성을 탐구합니다.',
+    final: '현대의 기술을<br />가장 아름답게 쓰는 일.',
+    contact_intro: '작품 소장과 전시, 공간 협업 및 제작에 관한<br />다양한 제안을 기다립니다.',
+    cap_01: '무아레 조명 · 2026',
+    cap_02: '조각보 램프 - 갓 · 2025',
+    cap_03: '스팬 트레이 · 2026',
+    cap_04: '크래들 와인스탠드 · 2026',
+    cap_05: '무아레 조명 · 2026',
+    cap_06: '조각보 램프 - 바람 · 2026',
+    cap_07: '크래들 와인스탠드 · 2026',
+    cap_08: 'Breathroom · 2025',
+    cap_09: '스팬 트레이 · 2026'
+  };
+
+  function applyLang(lang) {
+    const dict = lang === 'en' ? EN : KO;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (dict[key]) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+    document.documentElement.lang = lang === 'en' ? 'en' : 'ko';
+  }
+
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
+})();
+</script>
+</body>
+</html>
