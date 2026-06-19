@@ -17,11 +17,10 @@
   --pad: clamp(1.15rem, 3.6vw, 2.8rem);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html{scroll-behavior:smooth}
 body{
   background:var(--bg);color:var(--fg);
   font-family:var(--font);font-weight:350;line-height:1.6;
-  overflow-x:hidden
 }
 img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
@@ -230,7 +229,7 @@ a{color:inherit;text-decoration:none}
 </style>
 </head>
 <body>
-<div class="page">
+  <div class="page">
 
   <!-- ═══ LANGUAGE TOGGLE ═══ -->
   <div class="lang-toggle" role="group" aria-label="Language">
@@ -365,122 +364,45 @@ a{color:inherit;text-decoration:none}
   <div class="sp-lg"></div>
 
   <!-- ═══ FINAL STATEMENT + CONTACT ═══ -->
-  <div class="statement-wrap r" data-delay="0">
-    <div class="body-text" style="font-size:clamp(0.62rem,0.8vw,0.72rem);max-width:350px;margin:0 auto clamp(1.2rem,2vw,1.8rem);line-height:1.7;color:var(--fg-soft)" data-i18n="writer_intro">
-      파보르는 김승기 작가가 전개하는 오브제 브랜드로,<br />
-      3D프린팅을 공예적 매체로 재해석하며<br />
-      새로운 조형과 물성을 탐구합니다.
+  <div class="statement-wrap">
+    <div class="r" data-delay="0">
+      <div class="body-text" style="font-size:clamp(0.62rem,0.8vw,0.72rem);max-width:350px;margin:0 auto clamp(1.2rem,2vw,1.8rem);line-height:1.7;color:var(--fg-soft)" data-i18n="writer_intro">
+        파보르는 김승기 작가가 전개하는 오브제 브랜드로,<br />
+        3D프린팅을 공예적 매체로 재해석하며<br />
+        새로운 조형과 물성을 탐구합니다.
+      </div>
     </div>
-    <div class="display-1" data-i18n="final">현대의 기술을<br />가장 아름답게 쓰는 일.</div>
-    <div class="logo-mini"><img src="images/logo-fabor.png" alt="FABOR" width="72" height="25" /></div>
-    <p class="contact-intro" data-i18n="contact_intro">작품 소장과 전시, 공간 협업 및 제작에 관한<br />다양한 제안을 기다립니다.</p>
-    <div class="contact-email">faborobjet@gmail.com</div>
-    <a href="https://www.instagram.com/fabor.objet/" target="_blank" rel="noopener" class="contact-insta">
-      @fabor.objet
-      <span class="arrow">&rarr;</span>
-    </a>
+    <div class="r" data-delay="0.3">
+      <div class="display-1" data-i18n="final">현대의 기술을<br />가장 아름답게 쓰는 일.</div>
+    </div>
+    <div class="r" data-delay="0.55">
+      <div class="logo-mini"><img src="images/logo-fabor.png" alt="FABOR" width="72" height="25" /></div>
+    </div>
+    <div class="r" data-delay="0.75">
+      <p class="contact-intro" data-i18n="contact_intro">작품 소장과 전시, 공간 협업 및 제작에 관한<br />다양한 제안을 기다립니다.</p>
+    </div>
+    <div class="r" data-delay="0.9">
+      <div class="contact-email">faborobjet@gmail.com</div>
+      <a href="https://www.instagram.com/fabor.objet/" target="_blank" rel="noopener" class="contact-insta">
+        @fabor.objet
+        <span class="arrow">&rarr;</span>
+      </a>
+    </div>
   </div>
-
-</div>
-
-<!-- ═══ LIGHTBOX ═══ -->
-<div class="lightbox" id="lightbox"><img src="" alt="" id="lightbox-img" /></div>
 
 <!-- ═══ FOOTER ═══ -->
 <footer class="site-footer">
   <p>&copy; 2026 FABOR. All rights reserved.</p>
 </footer>
 
+</div>
+<div class="lightbox" id="lightbox"><img src="" alt="" id="lightbox-img" /></div>
+
 <script>
 (function(){
   'use strict';
 
-  /* ── smooth inertia scroll ── */
-  let targetY = window.scrollY;
-  let currentY = window.scrollY;
-  let velocity = 0;
-  const SMOOTH = 0.28;
-  const DAMP = 0.88;
-  const VEL_CAP = 120;
-  let ticking = false;
-  let scrollLocked = false;
-  let lastTouchTime = 0;
-  let touchVelY = 0;
-
-  function scrollTick() {
-    const dy = targetY - currentY;
-    velocity *= DAMP;
-    if (Math.abs(dy) > 0.3) {
-      currentY += dy * SMOOTH;
-    } else if (Math.abs(velocity) < 0.3) {
-      currentY = targetY;
-      window.scrollTo(0, Math.round(currentY));
-      ticking = false;
-      return;
-    }
-    currentY += velocity;
-    currentY = Math.max(0, Math.min(currentY, document.documentElement.scrollHeight - window.innerHeight));
-    window.scrollTo(0, Math.round(currentY));
-    requestAnimationFrame(scrollTick);
-  }
-
-  function kickScroll() {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(scrollTick);
-    }
-  }
-
-  function clampTarget() {
-    targetY = Math.max(0, Math.min(targetY, document.documentElement.scrollHeight - window.innerHeight));
-  }
-
-  /* intercept scroll events */
-  function onWheel(e) {
-    e.preventDefault();
-    velocity += e.deltaY * 0.4;
-    velocity = Math.max(-VEL_CAP, Math.min(VEL_CAP, velocity));
-    targetY += e.deltaY;
-    clampTarget();
-    kickScroll();
-  }
-  function onTouchStartY(e) {
-    scrollLocked = true;
-    velocity = 0;
-    const touch = e.touches[0];
-    if (!touch) return;
-    lastTouchY = touch.clientY;
-    lastTouchTime = performance.now();
-    touchVelY = 0;
-  }
-  function onTouchMove(e) {
-    if (!scrollLocked) return;
-    const touch = e.touches[0];
-    if (!touch) return;
-    e.preventDefault();
-    const now = performance.now();
-    const dt = Math.max(1, now - lastTouchTime);
-    const dy = lastTouchY - touch.clientY;
-    touchVelY = dy / dt * 16;
-    targetY += dy;
-    lastTouchY = touch.clientY;
-    lastTouchTime = now;
-    clampTarget();
-    kickScroll();
-  }
-  function onTouchEnd() {
-    scrollLocked = false;
-    velocity += touchVelY * 2.5;
-    velocity = Math.max(-VEL_CAP, Math.min(VEL_CAP, velocity));
-    kickScroll();
-  }
-
-  document.addEventListener('wheel', onWheel, { passive: false });
-  document.addEventListener('touchstart', onTouchStartY, { passive: true });
-  document.addEventListener('touchmove', onTouchMove, { passive: false });
-  document.addEventListener('touchend', onTouchEnd, { passive: true });
-
-  /* ── reveal animation — 각 요소 자연스럽게 떠오르기 ── */
+  /* ── reveal animation — 네이티브 스크롤 + IntersectionObserver ── */
   const els = document.querySelectorAll('.r');
   const heroEls = document.querySelectorAll('.hero .r');
 
@@ -507,15 +429,12 @@ a{color:inherit;text-decoration:none}
 
   const obsOpts = { threshold: 0, rootMargin: '0px 0px 60px 0px' };
 
-  function showEl(el) { el.classList.add('visible'); }
-  function hideEl(el) { el.classList.remove('visible'); }
-
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
-        showEl(entry.target);
+        entry.target.classList.add('visible');
       } else {
-        hideEl(entry.target);
+        entry.target.classList.remove('visible');
       }
     }
   }, obsOpts);
@@ -556,7 +475,7 @@ a{color:inherit;text-decoration:none}
     const toggle = document.querySelector('.lang-toggle');
     if (!hero || !toggle) return;
     const heroBottom = hero.offsetTop + hero.offsetHeight;
-    const scrollY = window.scrollY || window.pageYOffset;
+    const scrollY = window.scrollY || window.pageYOffset || 0;
     toggle.style.background = scrollY < heroBottom
       ? 'rgba(0,0,0,0.5)'
       : 'rgba(0,0,0,0.06)';
@@ -574,8 +493,8 @@ a{color:inherit;text-decoration:none}
       }
     });
   }
-  window.addEventListener('scroll', updateLangMode);
-  requestAnimationFrame(updateLangMode);
+  window.addEventListener('scroll', updateLangMode, { passive: true });
+  updateLangMode();
 
   const EN = {
     hero_subtitle: 'The Language of<br />Engineered Craft',
