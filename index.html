@@ -15,13 +15,20 @@
   --accent:  oklch(46% 0.13 260);
   --font: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --pad: clamp(1.15rem, 3.6vw, 2.8rem);
+  --hero-bg: url('images/webp/IMG_0112.webp');
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html,body{
+  width:100%;height:100%;overflow:hidden;touch-action:none;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  overscroll-behavior:none;
+  -webkit-overflow-scrolling:touch
+}
 body{
   background:var(--bg);color:var(--fg);
   font-family:var(--font);font-weight:350;line-height:1.6;
 }
+#scroll-wrap{will-change:transform}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
 
@@ -71,22 +78,22 @@ a{color:inherit;text-decoration:none}
 .click-img:hover{filter:brightness(0.92)}
 .click-img:active{filter:brightness(0.85)}
 /* ── varied spacers — text→image half width, image→image wide + scattered ── */
-.sp-xs{height:clamp(0.45rem,0.9vw,0.7rem)}
-.sp-sm{height:clamp(1.8rem,5.4vw,4.5rem)}
-.sp-md{height:clamp(3.6rem,9vw,7.2rem)}
-.sp-lg{height:clamp(4.5rem,12.6vw,10.8rem)}
-.sp-xl{height:clamp(7.2rem,16.2vw,14.4rem)}
-.sp-xx{height:clamp(9.9rem,21.6vw,18rem)}
+.sp-xs{height:clamp(0.5rem,1vw,0.8rem)}
+.sp-sm{height:clamp(2rem,6vw,5rem)}
+.sp-md{height:clamp(4rem,10vw,8rem)}
+.sp-lg{height:clamp(5rem,14vw,12rem)}
+.sp-xl{height:clamp(8rem,18vw,16rem)}
+.sp-xx{height:clamp(11rem,24vw,20rem)}
 
 /* ═══ HERO ═══ */
 .hero{
-  position:relative;min-height:100dvh;
+  position:relative;min-height:100svh;
   display:flex;flex-direction:column;justify-content:space-between;
   padding:var(--pad);padding-top:clamp(3.2rem,9vh,6.5rem);
   color:#fff
 }
 .hero-bg{
-  position:absolute;inset:0;z-index:-1;
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:
     linear-gradient(
       180deg,
@@ -95,7 +102,7 @@ a{color:inherit;text-decoration:none}
       rgba(0,0,0,0.08) 65%,
       rgba(0,0,0,0.55) 100%
     ),
-    var(--hero-bg, url('images/webp/IMG_0112.webp')) center / cover no-repeat
+    var(--hero-bg, url('images/webp/IMG_0112.webp')) center / cover no-repeat;
 }
 .hero-top{flex:1;display:flex;flex-direction:column;justify-content:center}
 .hero-logo{max-width:clamp(130px,22vw,200px);margin-bottom:clamp(0.35rem,0.7vw,0.7rem)}
@@ -139,7 +146,6 @@ a{color:inherit;text-decoration:none}
 .img-full img{width:100%;height:clamp(22vh,50vw,70vh);object-fit:cover}
 .img-wide{width:min(85%,920px);margin:0 auto}
 .img-wide img{width:100%;height:clamp(24vh,38vw,60vh);object-fit:cover}
-.img-wide.jogakbo-gat img{aspect-ratio:3/4;height:auto;width:100%;object-fit:cover}
 .img-med{width:min(58%,560px)}
 .img-med img{width:100%;height:clamp(18vh,30vw,52vh);object-fit:cover}
 .img-3col{display:flex;flex-direction:column;gap:clamp(4rem,12vw,10rem);width:100vw;margin-left:calc(var(--pad)*-1)}
@@ -210,18 +216,19 @@ a{color:inherit;text-decoration:none}
 @media(max-width:480px){
   .hero-logo{max-width:110px}
   .img-med{width:min(68%,100%)}
-  .img-left,.img-right{margin-left:0;margin-right:0}
+  .img-left,.img-right,.img-mobile-right{margin-left:0;margin-right:0}
+  .img-mobile-right .img-cap{text-align:left}
 }
 @media(min-width:1024px){
   .img-full img{height:clamp(50vh,38vw,85vh)}
-  .img-wide img:not(.jogakbo-gat img){height:clamp(36vh,32vw,72vh)}
+  .img-wide img{height:clamp(36vh,32vw,72vh)}
   .img-med img{height:clamp(28vh,26vw,64vh)}
-  .sp-xs{height:clamp(0.45rem,1.35vw,0.9rem)}
-  .sp-sm{height:clamp(2.7rem,7.2vw,6.3rem)}
-  .sp-md{height:clamp(4.5rem,10.8vw,9rem)}
-  .sp-lg{height:clamp(6.3rem,14.4vw,12.6rem)}
-  .sp-xl{height:clamp(9rem,18vw,16.2rem)}
-  .sp-xx{height:clamp(12.6rem,25.2vw,21.6rem)}
+  .sp-xs{height:clamp(0.5rem,1.5vw,1rem)}
+  .sp-sm{height:clamp(3rem,8vw,7rem)}
+  .sp-md{height:clamp(5rem,12vw,10rem)}
+  .sp-lg{height:clamp(7rem,16vw,14rem)}
+  .sp-xl{height:clamp(10rem,20vw,18rem)}
+  .sp-xx{height:clamp(14rem,28vw,24rem)}
   .hero-title{font-size:clamp(1.24rem,4.16vw,3.12rem)}
   .hero-tag{font-size:clamp(0.72rem,1.01vw,1.17rem)}
   .text-block .lead{font-size:clamp(1.01rem,1.43vw,1.37rem)}
@@ -233,7 +240,8 @@ a{color:inherit;text-decoration:none}
 </style>
 </head>
 <body>
-  <div class="page">
+  <div id="scroll-wrap">
+<div class="page">
 
   <!-- ═══ LANGUAGE TOGGLE ═══ -->
   <div class="lang-toggle" role="group" aria-label="Language">
@@ -242,8 +250,8 @@ a{color:inherit;text-decoration:none}
   </div>
 
   <!-- ═══ HERO ═══ -->
-  <section class="hero" id="hero">
-    <div class="hero-bg"></div>
+  <div class="hero-bg"></div>
+<section class="hero" id="hero">
     <div class="hero-top">
       <div class="hero-logo r" data-delay="0">
 <img src="images/logo-fabor.png" alt="FABOR" width="110" height="38" />
@@ -283,7 +291,7 @@ a{color:inherit;text-decoration:none}
   <div class="sp-xx"></div>
 
   <!-- ═══ IMAGE ── jogakbo1 ═══ -->
-  <div class="img-wide jogakbo-gat r click-img" data-delay="0.04" data-caption="조각보 램프 - 갓 2025">
+  <div class="img-wide r click-img" data-delay="0.12" data-caption="조각보 램프 - 갓 2025">
     <img src="images/webp/jogakbo1.webp" alt="" />
     <span class="img-cap" data-i18n="cap_02">조각보 램프 - 갓 · 2025</span>
   </div>
@@ -321,7 +329,7 @@ a{color:inherit;text-decoration:none}
   <div class="sp-lg"></div>
 
   <!-- ═══ IMAGE ── cradlewine2 ═══ -->
-  <div class="img-med img-left r click-img" data-delay="0.14" data-caption="크래들 와인스탠드 2026">
+  <div class="img-med img-left img-mobile-right r click-img" data-delay="0.14" data-caption="크래들 와인스탠드 2026">
     <img src="images/webp/cradlewine2.webp" alt="" />
     <span class="img-cap" data-i18n="cap_04">크래들 와인스탠드 · 2026</span>
   </div>
@@ -369,31 +377,23 @@ a{color:inherit;text-decoration:none}
   <div class="sp-lg"></div>
 
   <!-- ═══ FINAL STATEMENT + CONTACT ═══ -->
-  <div class="statement-wrap">
-    <div class="r" data-delay="0">
-      <div class="body-text" style="font-size:clamp(0.62rem,0.8vw,0.72rem);max-width:350px;margin:0 auto clamp(1.2rem,2vw,1.8rem);line-height:1.7;color:var(--fg-soft)" data-i18n="writer_intro">
-        파보르는 김승기 작가가 전개하는 오브제 브랜드로,<br />
-        3D프린팅을 공예적 매체로 재해석하며<br />
-        새로운 조형과 물성을 탐구합니다.
-      </div>
+  <div class="statement-wrap r" data-delay="0">
+    <div class="body-text" style="font-size:clamp(0.62rem,0.8vw,0.72rem);max-width:350px;margin:0 auto clamp(1.2rem,2vw,1.8rem);line-height:1.7;color:var(--fg-soft)" data-i18n="writer_intro">
+      파보르는 김승기 작가가 전개하는 오브제 브랜드로,<br />
+      3D프린팅을 공예적 매체로 재해석하며<br />
+      새로운 조형과 물성을 탐구합니다.
     </div>
-    <div class="r" data-delay="0.3">
-      <div class="display-1" data-i18n="final">현대의 기술을<br />가장 아름답게 쓰는 일.</div>
-    </div>
-    <div class="r" data-delay="0.55">
-      <div class="logo-mini"><img src="images/logo-fabor.png" alt="FABOR" width="72" height="25" /></div>
-    </div>
-    <div class="r" data-delay="0.75">
-      <p class="contact-intro" data-i18n="contact_intro">작품 소장과 전시, 공간 협업 및 제작에 관한<br />다양한 제안을 기다립니다.</p>
-    </div>
-    <div class="r" data-delay="0.9">
-      <div class="contact-email">faborobjet@gmail.com</div>
-      <a href="https://www.instagram.com/fabor.objet/" target="_blank" rel="noopener" class="contact-insta">
-        @fabor.objet
-        <span class="arrow">&rarr;</span>
-      </a>
-    </div>
+    <div class="display-1" data-i18n="final">현대의 기술을<br />가장 아름답게 쓰는 일.</div>
+    <div class="logo-mini"><img src="images/logo-fabor.png" alt="FABOR" width="72" height="25" /></div>
+    <p class="contact-intro" data-i18n="contact_intro">작품 소장과 전시, 공간 협업 및 제작에 관한<br />다양한 제안을 기다립니다.</p>
+    <div class="contact-email">faborobjet@gmail.com</div>
+    <a href="https://www.instagram.com/fabor.objet/" target="_blank" rel="noopener" class="contact-insta">
+      @fabor.objet
+      <span class="arrow">&rarr;</span>
+    </a>
   </div>
+
+</div>
 
 <!-- ═══ FOOTER ═══ -->
 <footer class="site-footer">
@@ -401,13 +401,20 @@ a{color:inherit;text-decoration:none}
 </footer>
 
 </div>
+
+<!-- ═══ LIGHTBOX ═══ -->
 <div class="lightbox" id="lightbox"><img src="" alt="" id="lightbox-img" /></div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <p>&copy; 2026 FABOR. All rights reserved.</p>
+</footer>
 
 <script>
 (function(){
   'use strict';
 
-  /* ── reveal animation — 네이티브 스크롤 + IntersectionObserver ── */
+  /* ── reveal animation — 각 요소 자연스럽게 떠오르기 ── */
   const els = document.querySelectorAll('.r');
   const heroEls = document.querySelectorAll('.hero .r');
 
@@ -416,16 +423,16 @@ a{color:inherit;text-decoration:none}
     const baseDelay = parseFloat(el.dataset.delay) || 0;
     const hasImg = el.querySelector('img');
     const dur = isHero
-      ? 0.5 + Math.random() * 0.3
+      ? 0.8 + Math.random() * 0.5
       : hasImg
-        ? 0.9 + Math.random() * 0.9
-        : 0.7 + Math.random() * 0.5;
+        ? 1.8 + Math.random() * 1.4
+        : 1.0 + Math.random() * 0.6;
     const dist = isHero
-      ? 14 + Math.random() * 14
+      ? 18 + Math.random() * 20
       : hasImg
-        ? 35 + Math.random() * 30
-        : 20 + Math.random() * 20;
-    const jit = 0.05 + Math.random() * 0.2;
+        ? 50 + Math.random() * 55
+        : 25 + Math.random() * 28;
+    const jit = 0.1 + Math.random() * 0.45;
     el.style.setProperty('--fade-dur', (dur * 0.6) + 's');
     el.style.setProperty('--float-dur', (dur * 1.5) + 's');
     el.style.setProperty('--float-y', dist + 'px');
@@ -434,12 +441,15 @@ a{color:inherit;text-decoration:none}
 
   const obsOpts = { threshold: 0, rootMargin: '0px 0px 60px 0px' };
 
+  function showEl(el) { el.classList.add('visible'); }
+  function hideEl(el) { el.classList.remove('visible'); }
+
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+        showEl(entry.target);
       } else {
-        entry.target.classList.remove('visible');
+        hideEl(entry.target);
       }
     }
   }, obsOpts);
@@ -480,7 +490,7 @@ a{color:inherit;text-decoration:none}
     const toggle = document.querySelector('.lang-toggle');
     if (!hero || !toggle) return;
     const heroBottom = hero.offsetTop + hero.offsetHeight;
-    const scrollY = window.scrollY || window.pageYOffset || 0;
+    const scrollY = typeof scurrentY !== 'undefined' ? scurrentY : 0;
     toggle.style.background = scrollY < heroBottom
       ? 'rgba(0,0,0,0.5)'
       : 'rgba(0,0,0,0.06)';
@@ -498,8 +508,7 @@ a{color:inherit;text-decoration:none}
       }
     });
   }
-  window.addEventListener('scroll', updateLangMode, { passive: true });
-  updateLangMode();
+  requestAnimationFrame(updateLangMode);
 
   const EN = {
     hero_subtitle: 'The Language of<br />Engineered Craft',
@@ -555,6 +564,91 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll('.lang-toggle button').forEach(btn => {
     btn.addEventListener('click', () => applyLang(btn.dataset.lang));
   });
+
+  /* ── scroll placeholder — transform 기반 스크롤 ── */
+  const wrap = document.getElementById('scroll-wrap');
+  const spacer = document.createElement('div');
+  spacer.id = 'scroll-spacer';
+  document.body.appendChild(spacer);
+  function scrollH() { return Math.max(wrap.scrollHeight, window.innerHeight + 1); }
+  function updateSpacer() {
+    spacer.style.height = scrollH() + 'px';
+  }
+  updateSpacer();
+
+  /* transform 기반 scroll — scrollTo 대신 wrap.style.transform 사용 */
+  var stargetY = window.scrollY;
+  var scurrentY = window.scrollY;
+  var svelocity = 0;
+  var st = false;
+  var sl = false;
+  var sdx = 0;
+  var sdt = 0;
+  var svy = 0;
+
+  function stick() {
+    svelocity *= 0.93;
+    var rem = stargetY - scurrentY;
+    if (Math.abs(rem) > 0.5) {
+      scurrentY += Math.max(-28, Math.min(28, rem * 0.15 + svelocity));
+    } else if (Math.abs(svelocity) < 0.5) {
+      scurrentY = stargetY;
+      wrap.style.transform = 'translateY(' + (-Math.round(scurrentY)) + 'px)';
+      st = false;
+      return;
+    }
+    scurrentY += svelocity;
+    scurrentY = Math.max(0, Math.min(scurrentY, scrollH() - window.innerHeight));
+    wrap.style.transform = 'translateY(' + (-Math.round(scurrentY)) + 'px)';
+    try { updateLangMode(); } catch(_) {}
+    requestAnimationFrame(stick);
+  }
+
+  function stickick() {
+    if (!st) { st = true; requestAnimationFrame(stick); }
+  }
+
+  function swheel(e) {
+    e.preventDefault();
+    stargetY += e.deltaY * 1.8;
+    svelocity += e.deltaY * 0.7;
+    svelocity = Math.max(-220, Math.min(220, svelocity));
+    stargetY = Math.max(0, Math.min(stargetY, scrollH() - window.innerHeight));
+    stickick();
+  }
+
+  function stouchStart(e) {
+    sl = true; svelocity = 0;
+    var t = e.touches[0]; if (!t) return;
+    sdx = t.clientY; sdt = performance.now(); svy = 0;
+  }
+  function stouchMove(e) {
+    if (!sl) return;
+    var t = e.touches[0]; if (!t) return;
+    e.preventDefault();
+    var now = performance.now();
+    var dt2 = Math.max(1, now - sdt);
+    var dy = sdx - t.clientY;
+    svy = dy / dt2 * 16;
+    stargetY += dy * 1.4;
+    svelocity += dy * 0.6;
+    svelocity = Math.max(-220, Math.min(220, svelocity));
+    sdx = t.clientY; sdt = now;
+    stargetY = Math.max(0, Math.min(stargetY, scrollH() - window.innerHeight));
+    stickick();
+  }
+  function stouchEnd() {
+    sl = false;
+    svelocity += svy * 3.5;
+    svelocity = Math.max(-220, Math.min(220, svelocity));
+    stickick();
+  }
+
+  document.addEventListener('wheel', swheel, { passive: false });
+  document.addEventListener('touchstart', stouchStart, { passive: true });
+  document.addEventListener('touchmove', stouchMove, { passive: false });
+  document.addEventListener('touchend', stouchEnd, { passive: true });
+  window.addEventListener('resize', updateSpacer);
 })();
 </script>
 </body>
