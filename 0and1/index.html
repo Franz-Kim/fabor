@@ -46,7 +46,8 @@
         margin: 40px auto;
         min-height: calc(100vh - 80px);
         border-radius: 32px;
-        overflow: hidden;
+        box-shadow: 0 0 0 1px rgba(0,0,0,0.04);
+        position: relative;
       }
     }
 
@@ -59,6 +60,12 @@
       height: 100vh;
       z-index: 0;
       pointer-events: none;
+    }
+    @media (min-width: 480px) {
+      #osc-canvas {
+        top: 40px;
+        height: calc(100vh - 80px);
+      }
     }
 
     .scroll-track {
@@ -77,6 +84,12 @@
       justify-content: center;
       padding: 0 var(--gutter);
       overflow: hidden;
+    }
+    @media (min-width: 480px) {
+      .prose-stage {
+        top: 40px;
+        height: calc(100vh - 80px);
+      }
     }
 
     .intro-title {
