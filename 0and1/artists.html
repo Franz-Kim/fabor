@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>작가 · 0과1 사이에서</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <style>
+    :root {
+      --bg:      oklch(99% 0 0);
+      --surface: oklch(100% 0 0);
+      --fg:      oklch(15% 0 0);
+      --muted:   oklch(50% 0 0);
+      --border:  oklch(88% 0 0);
+
+      --font: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+      --pad: clamp(20px, 5vw, 32px);
+      --phone: 420px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      font-weight: 300;
+      line-height: 1.8;
+      letter-spacing: -0.01em;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .phone-frame {
+      max-width: var(--phone);
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      background: var(--surface);
+    }
+    @media (min-width: 480px) {
+      .phone-frame {
+        box-shadow: 0 0 0 1px var(--border);
+        margin: 40px auto;
+        min-height: calc(100vh - 80px);
+        border-radius: 32px;
+        overflow: hidden;
+      }
+    }
+
+    .back-link {
+      position: fixed;
+      top: 24px;
+      left: calc(50% - (var(--phone) / 2) + var(--pad));
+      z-index: 100;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--fg);
+      letter-spacing: 0.04em;
+      transition: opacity 0.3s;
+    }
+    @media (max-width: 479px) {
+      .back-link { left: var(--pad); }
+    }
+    .back-link:hover { opacity: 0.4; }
+
+    .artist-section {
+      padding: 60px var(--pad) 48px;
+    }
+    .artist-name {
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 2px;
+    }
+    .artist-eng {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      letter-spacing: 0.04em;
+    }
+
+    .info-group {
+      margin-bottom: 32px;
+    }
+    .info-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .info-item {
+      display: flex;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 6px;
+    }
+    .info-year {
+      min-width: 72px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .social-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      transition: opacity 0.3s;
+      letter-spacing: 0.02em;
+    }
+    .social-link:hover { opacity: 0.4; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 44px 0;
+    }
+
+    .page-foot {
+      padding: 40px var(--pad) 40px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <a href="index.html" class="back-link">←</a>
+    <nav class="nav-pill">
+      <a href="index.html">INTRO</a>
+      <a href="works.html">WORKS</a>
+      <a href="process.html">PROCESS</a>
+      <a href="artists.html" class="active">ARTISTS</a>
+    </nav>
+
+    <div class="artist-section">
+      <h2 class="artist-name">김승기</h2>
+      <p class="artist-eng">Seungki Kim</p>
+
+      <div class="info-group">
+        <p class="info-label">Education</p>
+        <div class="info-item">
+          <span class="info-year">2019</span>
+          <span>박사, KAIST 산업디자인학과, 대전</span>
+        </div>
+      </div>
+
+      <div class="info-group">
+        <p class="info-label">Experience</p>
+        <div class="info-item">
+          <span class="info-year">2026 –</span>
+          <span>한양대학교 기술경영전문대학원 겸임교수</span>
+        </div>
+        <div class="info-item">
+          <span class="info-year">2022 – 25</span>
+          <span>3D, AI 스타트업 리콘랩스 크리에이티브디렉터</span>
+        </div>
+      </div>
+
+      <div class="info-group">
+        <p class="info-label">Selected Exhibition</p>
+        <div class="info-item">
+          <span class="info-year">2025</span>
+          <span>&lt;PRPT SET : Vault Service II&gt;, 서울 / 성수 WZ스튜디오</span>
+        </div>
+        <div class="info-item">
+          <span class="info-year">2021</span>
+          <span>&lt;ZER01NE Day : Playground&gt;, 서울 / 원효로</span>
+        </div>
+        <div class="info-item">
+          <span class="info-year">2021</span>
+          <span>&lt;내일의 예술전 : 뉴미디어 아트 선정작가 12인&gt;, 예술의전당</span>
+        </div>
+      </div>
+
+      <a href="https://instagram.com/fabor.objet" target="_blank" rel="noopener" class="social-link">@fabor.objet →</a>
+
+      <div class="divider"></div>
+
+      <h2 class="artist-name">한우현</h2>
+      <p class="artist-eng">Woohyun Han</p>
+
+      <div class="info-group">
+        <p class="info-label">Education</p>
+        <div class="info-item">
+          <span class="info-year">2026</span>
+          <span>석사, 홍익대학교 일반대학원 목조형가구학과, 서울</span>
+        </div>
+      </div>
+
+      <div class="info-group">
+        <p class="info-label">Awards</p>
+        <div class="info-item">
+          <span class="info-year">2025</span>
+          <span>청주공예비엔날레, 입선</span>
+        </div>
+        <div class="info-item">
+          <span class="info-year">2023</span>
+          <span>대한민국 미술대전 디자인·현대공예부문, 특선</span>
+        </div>
+      </div>
+
+      <div class="info-group">
+        <p class="info-label">Selected Exhibition</p>
+        <div class="info-item">
+          <span class="info-year">2026</span>
+          <span>&lt;하나의 나무, 무한한 관점&gt;, 서울 / 블루캐비닛 갤러리</span>
+        </div>
+        <div class="info-item">
+          <span class="info-year">2025</span>
+          <span>&lt;공예풍:경(工藝風:景)&gt;, 서울 / 서울공예박물관</span>
+        </div>
+        <div class="info-item">
+          <span class="info-year">2025</span>
+          <span>&lt;낯선 형상 : 도착의 조각들&gt;, 남원 / 미도탕 문화저장소</span>
+        </div>
+      </div>
+
+      <a href="https://instagram.com/hanwoohyun_" target="_blank" rel="noopener" class="social-link">@hanwoohyun_ →</a>
+    </div>
+
+    <footer class="page-foot">
+      Sindang Project Exhibition · 2026
+    </footer>
+  </div>
+
+  <style>
+    .nav-pill {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 0;
+      background: rgba(255, 255, 255, 0.64);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border-radius: 40px;
+      padding: 4px;
+      border: 0.5px solid #111;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+    .nav-pill a {
+      color: rgba(0,0,0,0.55);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      padding: 8px 16px;
+      border-radius: 40px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .nav-pill a:hover,
+    .nav-pill a.active {
+      color: #000;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    @media (max-width: 479px) {
+      .nav-pill { bottom: 20px; }
+      .nav-pill a { padding: 7px 12px; font-size: 10px; }
+    }
+  </style>
+</body>
+</html>

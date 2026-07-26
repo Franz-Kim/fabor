@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>작업 과정 · 0과1 사이에서</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <style>
+    :root {
+      --bg:      oklch(99% 0 0);
+      --surface: oklch(100% 0 0);
+      --fg:      oklch(15% 0 0);
+      --muted:   oklch(50% 0 0);
+      --border:  oklch(88% 0 0);
+
+      --font: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+      --pad: clamp(20px, 5vw, 32px);
+      --phone: 420px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      font-weight: 200;
+      line-height: 1.7;
+      letter-spacing: -0.01em;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .phone-frame {
+      max-width: var(--phone);
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    @media (min-width: 480px) {
+      .phone-frame {
+        box-shadow: 0 0 0 1px var(--border);
+        margin: 40px auto;
+        min-height: calc(100vh - 80px);
+        border-radius: 32px;
+      }
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    .media-wrap {
+      position: relative;
+      padding: 60px var(--pad) 80px;
+    }
+
+    .media-item {
+      width: 100%;
+      margin-bottom: 48px;
+      position: relative;
+      will-change: transform;
+    }
+
+    .media-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: grayscale(1);
+      transition: opacity 0.4s;
+    }
+    .media-item img:hover { opacity: 0.85; }
+
+    .media-item.wide { max-width: 100%; }
+    .media-item.med { max-width: 82%; }
+    .media-item.narr { max-width: 64%; }
+    .media-item.align-left { margin-left: 0; margin-right: auto; }
+    .media-item.align-right { margin-left: auto; margin-right: 0; }
+    .media-item.align-center { margin-left: auto; margin-right: auto; }
+
+    .page-foot {
+      padding: 40px var(--pad) 40px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="media-wrap" id="mediaWrap"></div>
+
+    <footer class="page-foot">
+      Sindang Project · 2026
+    </footer>
+  </div>
+
+  <nav class="nav-pill">
+    <a href="index.html">INTRO</a>
+    <a href="works.html">WORKS</a>
+    <a href="process.html" class="active">PROCESS</a>
+    <a href="artists.html">ARTISTS</a>
+  </nav>
+
+  <style>
+    .nav-pill {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 0;
+      background: rgba(255, 255, 255, 0.64);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border-radius: 40px;
+      padding: 4px;
+      border: 0.5px solid #111;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+    .nav-pill a {
+      color: rgba(0,0,0,0.55);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      padding: 8px 16px;
+      border-radius: 40px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .nav-pill a:hover,
+    .nav-pill a.active {
+      color: #000;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    @media (max-width: 479px) {
+      .nav-pill { bottom: 20px; }
+      .nav-pill a { padding: 7px 12px; font-size: 10px; }
+    }
+  </style>
+
+  <script>
+    const images = [
+      'ms1kd4qu-dscf23141.avif',
+      'ms1kd4qz-dscf23151.avif',
+      'ms1kd4r1-dscf23191.avif',
+      'ms1kd4r2-dscf23271.avif',
+      'ms1kd4r3-img_05311.avif',
+      'ms1kd4rq-img_05341.avif',
+      'ms1kd4s1-img_05541.avif',
+      'ms1kd4s8-img_06251.avif',
+      'ms1kd4sc-img_06921.avif',
+      'ms1kd4sf-img_07221.avif',
+      'ms1kd4sh-img_60471.avif',
+      'ms1kd4sk-img_60501.avif',
+      'ms1kd4v7-img_88901.avif',
+      'ms1kd4v9-img_88921.avif',
+      'ms1kd4vd-img_89071.avif',
+      'ms1kd4vg-img_89461.avif',
+      'ms1kd4vi-img_91211.avif'
+    ];
+
+    const sizes = ['wide', 'med', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide'];
+    const aligns = ['align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center'];
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function init() {
+      const wrap = document.getElementById('mediaWrap');
+      const shuffled = shuffle([...images]);
+      const shuffledSizes = shuffle([...sizes]);
+      const shuffledAligns = shuffle([...aligns]);
+
+      shuffled.forEach((file, i) => {
+        const size = shuffledSizes[i % shuffledSizes.length];
+        const align = shuffledAligns[i % shuffledAligns.length];
+        const speed = (Math.random() * 0.28 + 0.04) * (Math.random() > 0.5 ? 1 : -1);
+
+        const div = document.createElement('div');
+        div.className = `media-item ${size} ${align}`;
+        div.dataset.speed = speed.toFixed(3);
+
+        const img = document.createElement('img');
+        img.src = `process-images/${file}`;
+        img.alt = '작업 과정';
+        img.loading = 'lazy';
+
+        div.appendChild(img);
+        wrap.appendChild(div);
+      });
+
+      const items = document.querySelectorAll('.media-item');
+
+      function updateParallax() {
+        const center = window.innerHeight / 2;
+        items.forEach(item => {
+          const s = parseFloat(item.dataset.speed) || 0;
+          const r = item.getBoundingClientRect();
+          const c = r.top + r.height / 2;
+          item.style.transform = `translateY(${(c - center) * s}px)`;
+        });
+      }
+
+      window.addEventListener('scroll', updateParallax, { passive: true });
+      updateParallax();
+    }
+
+    init();
+  </script>
+</body>
+</html>

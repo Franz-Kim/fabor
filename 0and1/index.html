@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>0과1 사이에서 · Sindang Project Exhibition</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <style>
+    :root {
+      --bg:      oklch(99% 0 0);
+      --surface: oklch(100% 0 0);
+      --fg:      oklch(15% 0 0);
+      --muted:   oklch(50% 0 0);
+      --border:  oklch(88% 0 0);
+
+      --font: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+      --phone: 420px;
+      --gutter: 28px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      background: #ffffff;
+      color: #111;
+      font-family: var(--font);
+      font-weight: 200;
+      line-height: 1.9;
+      letter-spacing: -0.01em;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .phone-frame {
+      max-width: var(--phone);
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+      background: #ffffff;
+    }
+    @media (min-width: 480px) {
+      .phone-frame {
+        margin: 40px auto;
+        min-height: calc(100vh - 80px);
+        border-radius: 32px;
+        overflow: hidden;
+      }
+    }
+
+    #osc-canvas {
+      position: fixed;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: var(--phone);
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .scroll-track {
+      position: relative;
+      z-index: 1;
+      height: 380vh;
+    }
+
+    .prose-stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 var(--gutter);
+      overflow: hidden;
+    }
+
+    .intro-title {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 70vh;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .intro-title.fade-out {
+      opacity: 0;
+      transform: translateY(-24px);
+    }
+    .intro-h1 {
+      font-size: 24px;
+      font-weight: 200;
+      letter-spacing: 0.18em;
+      line-height: 1.5;
+      margin-bottom: 14px;
+      color: #111;
+    }
+    .intro-artist {
+      font-size: 14px;
+      font-weight: 200;
+      letter-spacing: 0.18em;
+      line-height: 1.6;
+      color: rgba(0,0,0,0.4);
+    }
+
+    .stanza {
+      position: absolute;
+      top: 65%;
+      width: calc(100% - (var(--gutter) * 2));
+      text-align: center;
+      font-size: 16px;
+      word-break: keep-all;
+      line-height: 2.2;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: opacity, transform;
+      color: #111;
+    }
+    .stanza.on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stanza.off {
+      opacity: 0;
+      transform: translateY(-16px);
+    }
+
+    .scroll-hint {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      opacity: 1;
+      transition: opacity 0.8s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+    .scroll-hint.hidden { opacity: 0; }
+    .scroll-hint span {
+      display: block;
+      font-size: 9px;
+      color: rgba(0,0,0,0.3);
+      letter-spacing: 0.15em;
+    }
+    .scroll-arrow {
+      display: block;
+      width: 16px;
+      height: 16px;
+      border-right: 1.5px solid rgba(0,0,0,0.3);
+      border-bottom: 1.5px solid rgba(0,0,0,0.3);
+      transform: rotate(45deg);
+      animation: hintBounce 2.2s ease-in-out infinite;
+    }
+    @keyframes hintBounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(8px); }
+    }
+
+    .info-block {
+      padding: 100px var(--gutter) 80px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      background: #ffffff;
+      margin: 0;
+    }
+    .info-title {
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      margin-bottom: 20px;
+      color: #111;
+    }
+    .info-meta {
+      color: rgba(0,0,0,0.7);
+      font-size: 14px;
+      line-height: 2.2;
+    }
+    .info-social {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .info-social a {
+      color: rgba(0,0,0,0.7);
+      transition: opacity 0.3s;
+      letter-spacing: 0.02em;
+    }
+    .info-social a:hover { opacity: 0.4; }
+
+    .footer-logos {
+      margin-top: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+      opacity: 0.5;
+    }
+    .logo-item {
+      display: flex;
+      align-items: center;
+    }
+    .logo-item img {
+      height: 28px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-pill {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      gap: 0;
+      background: rgba(255, 255, 255, 0.64);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border-radius: 40px;
+      padding: 4px;
+      border: 0.5px solid #111;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+    .nav-pill a {
+      color: rgba(0,0,0,0.4);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      padding: 8px 16px;
+      border-radius: 40px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .nav-pill a:hover,
+    .nav-pill a.active {
+      color: #111;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    @media (max-width: 479px) {
+      .nav-pill { bottom: 20px; }
+      .nav-pill a { padding: 7px 12px; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <canvas id="osc-canvas"></canvas>
+
+    <div class="scroll-hint" id="scrollHint">
+      <span class="scroll-arrow"></span>
+      <span>SCROLL</span>
+    </div>
+
+    <div class="scroll-track">
+      <div class="prose-stage">
+        <div class="intro-title" id="introTitle">
+          <div class="intro-h1">0과1 사이에서</div>
+          <div class="intro-artist">김승기</div>
+          <div class="intro-artist">한우현</div>
+        </div>
+        <div class="stanza" data-range="[0.035, 0.13]">우리는 흔들린다.</div>
+        <div class="stanza" data-range="[0.13, 0.24]">그리던 이상과 현실 사이에서.<br>사람들은 흔들림을 불안이라 말하고,<br>오차라 말하며, 극복해야 할 상태라고 이야기한다.</div>
+        <div class="stanza" data-range="[0.24, 0.34]">그러나 바람을 만난 나무는<br>흔들리기에 부러지지 않고,<br>물결은 끊임없이 흔들리기에 앞으로 나아간다.</div>
+        <div class="stanza" data-range="[0.34, 0.40]">움직임은 흔들림에서 시작된다.</div>
+        <div class="stanza" data-range="[0.40, 0.54]">우리는 설계와 실행, 계산과 우연 사이를<br>오가며 끊임없이 움직인다.<br>이 흔들림은 우리를 조금씩 다른 모습으로 만들고,<br>조금씩 앞으로 나아가게 한다.</div>
+        <div class="stanza" data-range="[0.54, 0.66]">이번 전시는 단단한 나무와 플라스틱이<br>흔들림을 품는 과정을 담는다.</div>
+        <div class="stanza" data-range="[0.66, 0.80]">0과1, 있음과 없음, 정답과 오답, 완전과 불완전.<br>그 사이에서 우리는 흔들리며,<br>앞으로 나아간다.</div>
+        <div class="stanza" data-range="[0.80, 1.0]" style="font-size: 12px; letter-spacing: 0.08em; color: rgba(0,0,0,0.3);">Sindang Project Exhibition<br>2026</div>
+      </div>
+    </div>
+
+    <section class="info-block">
+      <h1 class="info-title">0과1 사이에서</h1>
+      <div class="info-meta">
+        <p>김승기 · 한우현</p>
+        <p>2026. 07. 30 — 08. 16</p>
+        <p style="margin-top: 8px; opacity: 0.7;">SASS GALLERY</p>
+      </div>
+      <div class="info-social">
+        <a href="https://instagram.com/fabor.objet" target="_blank" rel="noopener">@fabor.objet</a>
+        <a href="https://instagram.com/hanwoohyun_" target="_blank" rel="noopener">@hanwoohyun_</a>
+      </div>
+
+      <div class="footer-logos">
+        <div class="logo-item">
+          <img src="ms1i2w3m-서울문화재단로고.png" alt="서울문화재단" style="height: 28px; width: auto; display: block;" />
+        </div>
+        <div class="logo-item">
+          <img src="ms1i2w3m-신당로고.png" alt="신당창작아케이드" style="height: 28px; width: auto; display: block;" />
+        </div>
+      </div>
+    </section>
+
+    <nav class="nav-pill">
+      <a href="index.html" class="active">INTRO</a>
+      <a href="works.html">WORKS</a>
+      <a href="process.html">PROCESS</a>
+      <a href="artists.html">ARTISTS</a>
+    </nav>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('osc-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const offCanvas = document.createElement('canvas');
+    const offCtx = offCanvas.getContext('2d');
+
+    let W, H, scrollPercent = 0;
+    let scrollHint = document.getElementById('scrollHint');
+    let introTitle = document.getElementById('introTitle');
+
+    function resize() {
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = window.innerHeight;
+      offCanvas.width = W;
+      offCanvas.height = H;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function draw() {
+      offCtx.fillStyle = '#ffffff';
+      offCtx.fillRect(0, 0, W, H);
+
+      const time = performance.now() * 0.001;
+      const swingAmp = 15 + 30 * Math.exp(-scrollPercent * 15) + 70 * scrollPercent * scrollPercent;
+      const swingFreq = 0.90 + scrollPercent * 0.80;
+      const centerX = W / 2 + Math.sin(time * swingFreq) * swingAmp;
+      const centerY = H * 0.45;
+
+      const r = 360;
+      const grad = offCtx.createRadialGradient(centerX, centerY, 0, centerX, centerY, r);
+      grad.addColorStop(0, 'rgba(0, 0, 0, 0.75)');
+      grad.addColorStop(0.15, 'rgba(0, 0, 0, 0.55)');
+      grad.addColorStop(0.35, 'rgba(0, 0, 0, 0.25)');
+      grad.addColorStop(0.6, 'rgba(0, 0, 0, 0.06)');
+      grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+      offCtx.beginPath();
+      offCtx.fillStyle = grad;
+      offCtx.ellipse(centerX, centerY, r * 0.65, r * 1.3, 0, 0, Math.PI * 2);
+      offCtx.fill();
+
+      const stripWidth = 6;
+      const stripCount = Math.ceil(W / stripWidth);
+      const stripShift = Math.sin(time * swingFreq * 1.2) * swingAmp * 0.25;
+      for (let i = 0; i < stripCount; i++) {
+        const sx = i * stripWidth + stripShift;
+        const alpha = 0.04 + 0.03 * Math.sin(i * 0.7 + time * 0.4);
+        offCtx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+        offCtx.fillRect(sx, 0, stripWidth, H);
+      }
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(offCanvas, 0, 0);
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    const stanzas = document.querySelectorAll('.stanza');
+    const track = document.querySelector('.scroll-track');
+
+    window.addEventListener('scroll', () => {
+      const rect = track.getBoundingClientRect();
+      const total = track.offsetHeight - window.innerHeight;
+      const current = -rect.top;
+      scrollPercent = Math.max(0, Math.min(1, current / total));
+
+      if (scrollPercent > 0.01) {
+        scrollHint.classList.add('hidden');
+      }
+
+      if (scrollPercent > 0.025) {
+        introTitle.classList.add('fade-out');
+      } else {
+        introTitle.classList.remove('fade-out');
+      }
+
+      stanzas.forEach(s => {
+        const [lo, hi] = JSON.parse(s.dataset.range);
+        if (scrollPercent >= lo && scrollPercent < hi) {
+          s.className = 'stanza on';
+        } else if (scrollPercent >= hi) {
+          s.className = 'stanza off';
+        } else {
+          s.className = 'stanza';
+        }
+      });
+    }, { passive: true });
+  </script>
+</body>
+</html>
