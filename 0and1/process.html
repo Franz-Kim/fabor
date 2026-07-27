@@ -51,7 +51,7 @@
       }
     }
 
-    img { max-width: 100%; height: auto; display: block; }
+    img, video { max-width: 100%; height: auto; display: block; }
 
     .media-wrap {
       position: relative;
@@ -65,14 +65,16 @@
       will-change: transform;
     }
 
-    .media-item img {
+    .media-item img,
+    .media-item video {
       width: 100%;
       height: auto;
       display: block;
       filter: grayscale(1);
       transition: opacity 0.4s;
     }
-    .media-item img:hover { opacity: 0.85; }
+    .media-item img:hover,
+    .media-item video:hover { opacity: 0.85; }
 
     .media-item.wide { max-width: 100%; }
     .media-item.med { max-width: 82%; }
@@ -147,28 +149,34 @@
   </style>
 
   <script>
-    const images = [
-      'ms1kd4qu-dscf23141.avif',
-      'ms1kd4qz-dscf23151.avif',
-      'ms1kd4r1-dscf23191.avif',
-      'ms1kd4r2-dscf23271.avif',
-      'ms1kd4r3-img_05311.avif',
-      'ms1kd4rq-img_05341.avif',
-      'ms1kd4s1-img_05541.avif',
-      'ms1kd4s8-img_06251.avif',
-      'ms1kd4sc-img_06921.avif',
-      'ms1kd4sf-img_07221.avif',
-      'ms1kd4sh-img_60471.avif',
-      'ms1kd4sk-img_60501.avif',
-      'ms1kd4v7-img_88901.avif',
-      'ms1kd4v9-img_88921.avif',
-      'ms1kd4vd-img_89071.avif',
-      'ms1kd4vg-img_89461.avif',
-      'ms1kd4vi-img_91211.avif'
+    const media = [
+      { file: 'ms1kd4qu-dscf23141.avif', type: 'img' },
+      { file: 'ms1kd4qz-dscf23151.avif', type: 'img' },
+      { file: 'ms1kd4r1-dscf23191.avif', type: 'img' },
+      { file: 'ms1kd4r2-dscf23271.avif', type: 'img' },
+      { file: 'ms1kd4r3-img_05311.avif', type: 'img' },
+      { file: 'ms1kd4rq-img_05341.avif', type: 'img' },
+      { file: 'ms1kd4s1-img_05541.avif', type: 'img' },
+      { file: 'ms1kd4s8-img_06251.avif', type: 'img' },
+      { file: 'ms1kd4sc-img_06921.avif', type: 'img' },
+      { file: 'ms1kd4sf-img_07221.avif', type: 'img' },
+      { file: 'ms1kd4sh-img_60471.avif', type: 'img' },
+      { file: 'ms1kd4sk-img_60501.avif', type: 'img' },
+      { file: 'ms1kd4v7-img_88901.avif', type: 'img' },
+      { file: 'ms1kd4v9-img_88921.avif', type: 'img' },
+      { file: 'ms1kd4vd-img_89071.avif', type: 'img' },
+      { file: 'ms1kd4vg-img_89461.avif', type: 'img' },
+      { file: 'ms1kd4vi-img_91211.avif', type: 'img' },
+      { file: 'ms2low4j-video1.mp4', type: 'video' },
+      { file: 'ms2low48-video2.mp4', type: 'video' },
+      { file: 'ms2low42-video3.mp4', type: 'video' },
+      { file: 'ms2low3s-video4.mp4', type: 'video' },
+      { file: 'ms2low2y-video5.mp4', type: 'video' }
     ];
 
-    const sizes = ['wide', 'med', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide'];
-    const aligns = ['align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center'];
+    const imgSizes = ['wide', 'med', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide', 'narr', 'med', 'wide'];
+    const videoSizes = ['wide', 'med', 'wide', 'med', 'wide'];
+    const aligns = ['align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center', 'align-left', 'align-center', 'align-right', 'align-left', 'align-center'];
 
     function shuffle(arr) {
       for (let i = arr.length - 1; i > 0; i--) {
@@ -180,12 +188,15 @@
 
     function init() {
       const wrap = document.getElementById('mediaWrap');
-      const shuffled = shuffle([...images]);
-      const shuffledSizes = shuffle([...sizes]);
+      const shuffled = shuffle([...media]);
       const shuffledAligns = shuffle([...aligns]);
 
-      shuffled.forEach((file, i) => {
-        const size = shuffledSizes[i % shuffledSizes.length];
+      let imgIdx = 0, vidIdx = 0;
+      shuffled.forEach((item, i) => {
+        const isVideo = item.type === 'video';
+        const size = isVideo
+          ? videoSizes[vidIdx++ % videoSizes.length]
+          : imgSizes[imgIdx++ % imgSizes.length];
         const align = shuffledAligns[i % shuffledAligns.length];
         const speed = (Math.random() * 0.28 + 0.04) * (Math.random() > 0.5 ? 1 : -1);
 
@@ -193,12 +204,23 @@
         div.className = `media-item ${size} ${align}`;
         div.dataset.speed = speed.toFixed(3);
 
-        const img = document.createElement('img');
-        img.src = `process-images/${file}`;
-        img.alt = '작업 과정';
-        img.loading = 'lazy';
+        if (isVideo) {
+          const video = document.createElement('video');
+          video.src = `process-images/${item.file}`;
+          video.muted = true;
+          video.loop = true;
+          video.playsInline = true;
+          video.autoplay = true;
+          video.controls = false;
+          div.appendChild(video);
+        } else {
+          const img = document.createElement('img');
+          img.src = `process-images/${item.file}`;
+          img.alt = '작업 과정';
+          img.loading = 'lazy';
+          div.appendChild(img);
+        }
 
-        div.appendChild(img);
         wrap.appendChild(div);
       });
 
