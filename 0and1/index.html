@@ -411,8 +411,7 @@
     let splashFinished = false;
     let splashSeen = false;
     try { splashSeen = new URLSearchParams(location.search).has('skipSplash'); } catch(e) {}
-    try { if (!splashSeen) splashSeen = !!localStorage.getItem('splash_seen'); } catch(e) {}
-    try { if (!splashSeen) splashSeen = !!sessionStorage.getItem('splash_seen'); } catch(e) {}
+    
 
     function hideSplash() {
       const splash = document.getElementById('splash');
@@ -491,8 +490,7 @@
             splash.classList.add('hidden');
             document.getElementById('mainContent').classList.add('visible');
             splashFinished = true;
-            try { localStorage.setItem('splash_seen', '1'); } catch(e) {}
-            try { sessionStorage.setItem('splash_seen', '1'); } catch(e) {}
+            
             setTimeout(() => {
               document.querySelector('.nav-pill').classList.add('visible');
             }, 200);
@@ -508,8 +506,7 @@
     window.addEventListener('pageshow', function(e) {
       try { if (new URLSearchParams(location.search).has('skipSplash')) { hideSplash(); return; } } catch(e) {}
       if (e.persisted) {
-        try { if (localStorage.getItem('splash_seen')) { hideSplash(); } } catch(e) {}
-        try { if (sessionStorage.getItem('splash_seen')) { hideSplash(); } } catch(e) {}
+        
       }
     });
 
