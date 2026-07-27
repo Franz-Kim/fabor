@@ -280,10 +280,78 @@
       .nav-pill { bottom: 20px; }
       .nav-pill a { padding: 7px 12px; font-size: 10px; }
     }
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #ffffff;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #splash.done {
+      opacity: 0;
+      transition: opacity 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    #splash.hidden {
+      display: none;
+    }
+    #splash-canvas {
+      display: block;
+      width: 100px;
+      height: 200px;
+    }
+    .splash-label {
+      margin-top: 24px;
+      font-size: 11px;
+      font-weight: 200;
+      letter-spacing: 0.15em;
+      color: rgba(0,0,0,0.3);
+      opacity: 0;
+      animation: labelFade 0.5s ease 0.4s forwards;
+    }
+    @keyframes labelFade {
+      to { opacity: 1; }
+    }
+
+    #mainContent {
+      opacity: 0;
+      transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    #mainContent.visible {
+      opacity: 1;
+    }
+    .nav-pill {
+      opacity: 0;
+      transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .nav-pill.visible {
+      opacity: 1;
+    }
+    .intro-title {
+      opacity: 0;
+      transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .intro-title.visible {
+      opacity: 1;
+    }
+    .intro-title.visible.fade-out {
+      opacity: 0;
+      transform: translateY(-24px);
+    }
   </style>
 </head>
 <body>
-  <div class="phone-frame">
+
+  <div id="splash">
+    <canvas id="splash-canvas"></canvas>
+    <div class="splash-label">LOADING</div>
+  </div>
+
+  <div class="phone-frame" id="mainContent">
     <canvas id="osc-canvas"></canvas>
 
     <div class="scroll-hint" id="scrollHint">
@@ -340,6 +408,111 @@
   </div>
 
   <script>
+    let splashFinished = false;
+    let splashSeen = false;
+    try { splashSeen = new URLSearchParams(location.search).has('skipSplash'); } catch(e) {}
+    try { if (!splashSeen) splashSeen = !!localStorage.getItem('splash_seen'); } catch(e) {}
+    try { if (!splashSeen) splashSeen = !!sessionStorage.getItem('splash_seen'); } catch(e) {}
+
+    function hideSplash() {
+      const splash = document.getElementById('splash');
+      if (splash && !splash.classList.contains('hidden')) {
+        splash.classList.add('hidden');
+        document.getElementById('mainContent').classList.add('visible');
+        document.querySelector('.nav-pill').classList.add('visible');
+        document.getElementById('introTitle').classList.add('visible');
+        splashFinished = true;
+        document.body.style.overflow = '';
+      }
+    }
+
+    if (splashSeen) {
+      hideSplash();
+    } else {
+      document.body.style.overflow = 'hidden';
+      const splashCanvas = document.getElementById('splash-canvas');
+      const sCtx = splashCanvas.getContext('2d');
+      let sW = 100, sH = 200;
+      splashCanvas.width = sW;
+      splashCanvas.height = sH;
+
+      const lineH = 100;
+      const lineW = 1.5;
+
+      function drawSplash(time) {
+        sCtx.fillStyle = '#ffffff';
+        sCtx.fillRect(0, 0, sW, sH);
+
+        const elapsed = time * 0.001;
+        const duration = 2.5;
+        const progress = Math.min(1, elapsed / duration);
+
+        const cx = sW / 2;
+        const cy = sH / 2;
+
+        const wind = Math.sin(elapsed * 1.8) * 0.5 + 0.5;
+        const windStr = 0.3 + 0.7 * progress;
+        const sway = Math.sin(elapsed * 1.2) * 18 * progress;
+
+        sCtx.save();
+        sCtx.translate(cx + sway, cy);
+
+        const segments = 40;
+        const segH = lineH / segments;
+        const color = `rgba(0,0,0,${0.25 + 0.55 * progress})`;
+
+        for (let s = 0; s < segments; s++) {
+          const y = -lineH / 2 + s * segH;
+          const t = s / segments;
+          const wave = Math.sin(elapsed * 2.5 + t * Math.PI * 2 * wind) * 24 * windStr * (1 - Math.abs(t - 0.5) * 0.6);
+          const xOff = wave * (0.3 + 0.7 * t);
+
+          sCtx.beginPath();
+          sCtx.strokeStyle = color;
+          sCtx.lineWidth = lineW;
+          sCtx.lineCap = 'round';
+
+          const prevWave = Math.sin(elapsed * 2.5 + ((s - 1) / segments) * Math.PI * 2 * wind) * 24 * windStr * (1 - Math.abs(((s - 1) / segments) - 0.5) * 0.6);
+          const prevX = xOff;
+          sCtx.moveTo(prevX, y);
+          sCtx.lineTo(xOff, y + segH);
+          sCtx.stroke();
+        }
+
+        sCtx.restore();
+
+        if (elapsed < duration) {
+          requestAnimationFrame(drawSplash);
+        } else {
+          const splash = document.getElementById('splash');
+          splash.classList.add('done');
+          document.body.style.overflow = '';
+          setTimeout(() => {
+            splash.classList.add('hidden');
+            document.getElementById('mainContent').classList.add('visible');
+            splashFinished = true;
+            try { localStorage.setItem('splash_seen', '1'); } catch(e) {}
+            try { sessionStorage.setItem('splash_seen', '1'); } catch(e) {}
+            setTimeout(() => {
+              document.querySelector('.nav-pill').classList.add('visible');
+            }, 200);
+            setTimeout(() => {
+              document.getElementById('introTitle').classList.add('visible');
+            }, 450);
+          }, 600);
+        }
+      }
+      requestAnimationFrame(drawSplash);
+    }
+
+    window.addEventListener('pageshow', function(e) {
+      try { if (new URLSearchParams(location.search).has('skipSplash')) { hideSplash(); return; } } catch(e) {}
+      if (e.persisted) {
+        try { if (localStorage.getItem('splash_seen')) { hideSplash(); } } catch(e) {}
+        try { if (sessionStorage.getItem('splash_seen')) { hideSplash(); } } catch(e) {}
+      }
+    });
+
     const canvas = document.getElementById('osc-canvas');
     const ctx = canvas.getContext('2d');
 
@@ -429,6 +602,13 @@
         }
       });
     }, { passive: true });
+
+    setTimeout(() => {
+      const splash = document.getElementById('splash');
+      if (splash && !splash.classList.contains('hidden')) {
+        hideSplash();
+      }
+    }, 3000);
   </script>
 </body>
 </html>

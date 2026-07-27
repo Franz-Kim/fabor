@@ -128,103 +128,253 @@
       color: var(--muted);
       letter-spacing: 0.06em;
     }
+
+    .essay-headnote {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .essay {
+      font-size: 14px;
+      line-height: 2;
+      font-weight: 300;
+    }
+    .essay p {
+      margin-bottom: 22px;
+    }
+    .pull-quote {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.9;
+      padding: 4px 0 4px 20px;
+      border-left: 1px solid var(--fg);
+      margin: 28px 0 26px;
+      letter-spacing: -0.01em;
+    }
+
+    .short-notes {
+      margin: 40px 0 36px;
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .notes-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-bottom: 18px;
+    }
+    .short-notes p {
+      font-size: 13px;
+      line-height: 1.9;
+      font-weight: 300;
+      margin-bottom: 10px;
+      padding-left: 12px;
+      border-left: 1px solid var(--border);
+    }
+
+    .work-list {
+      margin-bottom: 40px;
+    }
+    .work-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .work-item.last {
+      border-bottom: none;
+    }
+    .work-method {
+      font-size: 13px;
+      font-weight: 400;
+    }
+    .work-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .toggle-wrap {
+      margin: 28px 0 20px;
+    }
+    .toggle-btn {
+      display: inline-block;
+      background: none;
+      border: 0.5px solid var(--fg);
+      border-radius: 40px;
+      font-family: var(--font);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--fg);
+      padding: 8px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .toggle-btn:hover {
+      background: var(--fg);
+      color: var(--surface);
+    }
+    .toggle-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.4s ease;
+      opacity: 0;
+    }
+    .toggle-content.open {
+      max-height: 800px;
+      opacity: 1;
+    }
+    .toggle-content .info-group {
+      margin-top: 28px;
+    }
   </style>
 </head>
 <body>
   <div class="phone-frame">
     <a href="index.html" class="back-link">←</a>
     <nav class="nav-pill">
-      <a href="index.html">INTRO</a>
+      <a href="index.html?skipSplash">INTRO</a>
       <a href="works.html">WORKS</a>
       <a href="process.html">PROCESS</a>
       <a href="artists.html" class="active">ARTISTS</a>
     </nav>
 
     <div class="artist-section">
-      <h2 class="artist-name">김승기</h2>
-      <p class="artist-eng">Seungki Kim</p>
-
-      <div class="info-group">
-        <p class="info-label">Education</p>
-        <div class="info-item">
-          <span class="info-year">2019</span>
-          <span>박사, KAIST 산업디자인학과, 대전</span>
-        </div>
-      </div>
-
-      <div class="info-group">
-        <p class="info-label">Experience</p>
-        <div class="info-item">
-          <span class="info-year">2026 –</span>
-          <span>한양대학교 기술경영전문대학원 겸임교수</span>
-        </div>
-        <div class="info-item">
-          <span class="info-year">2022 – 25</span>
-          <span>3D, AI 스타트업 리콘랩스 크리에이티브디렉터</span>
-        </div>
-      </div>
-
-      <div class="info-group">
-        <p class="info-label">Selected Exhibition</p>
-        <div class="info-item">
-          <span class="info-year">2025</span>
-          <span>&lt;PRPT SET : Vault Service II&gt;, 서울 / 성수 WZ스튜디오</span>
-        </div>
-        <div class="info-item">
-          <span class="info-year">2021</span>
-          <span>&lt;ZER01NE Day : Playground&gt;, 서울 / 원효로</span>
-        </div>
-        <div class="info-item">
-          <span class="info-year">2021</span>
-          <span>&lt;내일의 예술전 : 뉴미디어 아트 선정작가 12인&gt;, 예술의전당</span>
-        </div>
-      </div>
-
-      <a href="https://instagram.com/fabor.objet" target="_blank" rel="noopener" class="social-link">@fabor.objet →</a>
-
-      <div class="divider"></div>
 
       <h2 class="artist-name">한우현</h2>
       <p class="artist-eng">Woohyun Han</p>
 
-      <div class="info-group">
-        <p class="info-label">Education</p>
-        <div class="info-item">
-          <span class="info-year">2026</span>
-          <span>석사, 홍익대학교 일반대학원 목조형가구학과, 서울</span>
-        </div>
-      </div>
-
-      <div class="info-group">
-        <p class="info-label">Awards</p>
-        <div class="info-item">
-          <span class="info-year">2025</span>
-          <span>청주공예비엔날레, 입선</span>
-        </div>
-        <div class="info-item">
-          <span class="info-year">2023</span>
-          <span>대한민국 미술대전 디자인·현대공예부문, 특선</span>
-        </div>
-      </div>
-
-      <div class="info-group">
-        <p class="info-label">Selected Exhibition</p>
-        <div class="info-item">
-          <span class="info-year">2026</span>
-          <span>&lt;하나의 나무, 무한한 관점&gt;, 서울 / 블루캐비닛 갤러리</span>
-        </div>
-        <div class="info-item">
-          <span class="info-year">2025</span>
-          <span>&lt;공예풍:경(工藝風:景)&gt;, 서울 / 서울공예박물관</span>
-        </div>
-        <div class="info-item">
-          <span class="info-year">2025</span>
-          <span>&lt;낯선 형상 : 도착의 조각들&gt;, 남원 / 미도탕 문화저장소</span>
-        </div>
-      </div>
-
       <a href="https://instagram.com/hanwoohyun_" target="_blank" rel="noopener" class="social-link">@hanwoohyun_ →</a>
-    </div>
+
+      <div class="essay" style="margin-top: 32px;">
+        <p>나는 오랫동안 자연의 풍경을 나무에 새겨왔다. 물의 흐름이나 흔들리는 나뭇잎처럼 끊임없이 변화하는 자연의 이미지를 단단한 목재 위에 조각하며, 움직임을 고정된 형태 안에 담아내고자 했다. 허나 이번 작업에서 시선은 나무 자체로 향한다.</p>
+
+        <p>나무는 벌목되고 재단된 이후에도 살아 있는 재료다. 결의 방향과 함수율, 주변의 온도와 습도에 따라 끊임없이 팽창하고 수축하며, 스스로 형태를 바꾸려는 성질을 지닌다. 그러나 목공은 오랫동안 이러한 움직임을 제어하는 기술을 발전시켜 왔다. 뒤틀림을 막고, 갈라짐을 피하며, 재료를 곧고 안정된 상태로 유지하는 것이 하나의 규범이었다.</p>
+
+        <p class="pull-quote">나는 이번 작업에서 그 규범을 거꾸로 따라간다.</p>
+
+        <p>나무가 스스로 움직일 수 있도록 얇게 켜내고, 결의 방향을 비틀어 재단하며, 한쪽 면에 의도적으로 수분을 더하거나 태운다. 재료를 통제하기보다 나무가 가진 성질이 드러날 수 있는 환경을 만든다. 이번 작업에서 나는 형태를 결정하는 사람이 아니라, 나무가 움직일 수 있도록 돕는 사람이 되고자 한다.</p>
+
+        <p>그렇게 단단했던 목재는 탄성을 갖게 되고, 바람과 습도, 시간에 반응하며 끊임없이 흔들린다. 그 흔들림은 결함이 아니라 재료가 여전히 살아 있다는 증거이며, 예측할 수 없는 변화가 만들어내는 또 하나의 조형이다.</p>
+
+        <p>완벽하게 고정된 형태보다 변화하는 상태를 받아들이는 것. 이번 작업은 흔들림을 제거하는 기술이 아니라, 흔들림을 하나의 조형 언어로 받아들이려는 시도이다.</p>
+
+        <p class="pull-quote">나는 나무를 원하는 형태로 고정하기보다, 스스로 움직일 수 있는 상태를 만든다.</p>
+      </div>
+
+      <div class="toggle-wrap">
+        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('open'); this.classList.toggle('open'); this.textContent = this.classList.contains('open') ? '작가 이력 닫기 ↑' : '작가 이력 보기 ↓'">
+          작가 이력 보기 ↓
+        </button>
+        <div class="toggle-content">
+          <div class="info-group">
+            <p class="info-label">Education</p>
+            <div class="info-item">
+              <span class="info-year">2026</span>
+              <span>석사, 홍익대학교 일반대학원 목조형가구학과, 서울</span>
+            </div>
+          </div>
+
+          <div class="info-group">
+            <p class="info-label">Awards</p>
+            <div class="info-item">
+              <span class="info-year">2025</span>
+              <span>청주공예비엔날레, 입선</span>
+            </div>
+            <div class="info-item">
+              <span class="info-year">2023</span>
+              <span>대한민국 미술대전 디자인·현대공예부문, 특선</span>
+            </div>
+          </div>
+
+          <div class="info-group">
+            <p class="info-label">Selected Exhibition</p>
+            <div class="info-item">
+              <span class="info-year">2026</span>
+              <span>&lt;하나의 나무, 무한한 관점&gt;, 서울 / 블루캐비닛 갤러리</span>
+            </div>
+            <div class="info-item">
+              <span class="info-year">2025</span>
+              <span>&lt;공예풍:경(工藝風:景)&gt;, 서울 / 서울공예박물관</span>
+            </div>
+            <div class="info-item">
+              <span class="info-year">2025</span>
+              <span>&lt;낯선 형상 : 도착의 조각들&gt;, 남원 / 미도탕 문화저장소</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 class="artist-name">김승기</h2>
+      <p class="artist-eng">Seungki Kim</p>
+
+      <a href="https://instagram.com/fabor.objet" target="_blank" rel="noopener" class="social-link">@fabor.objet →</a>
+
+      <div class="essay" style="margin-top: 32px;">
+        <p>디지털과 물리적 경계를 넘나드는 작업을 통해 재료와 기술의 새로운 관계를 탐구한다. 3D 스캐닝, AI 모델링, 전통적인 목공 기법을 결합하여 기존의 공예적 관념에 질문을 던진다.</p>
+
+        <p>정밀한 연산과 반복되는 손의 수행은 그의 작업에서 분리될 수 없는 두 축이다. 컴퓨터가 생성한 형태를 손으로 다듬고, 손으로 만든 형태를 다시 디지털로 변환하는 과정을 반복하며, 재료가 지닌 물성과 디지털이 지닌 가능성 사이의 접점을 찾아간다.</p>
+
+        <p class="pull-quote">그의 작업은 계산과 우연의 경계에서 발생하는 흔들림을 하나의 조형 언어로 받아들인다.</p>
+
+        <p>이번 전시에서 선보이는 작업들은 3D 프린팅과 전통적인 목재 가공 기법을 융합하여, 단단한 재료에 유연한 움직임을 불어넣는다. 기계와 인간, 디지털과 아날로그의 경계에서 발생하는 미세한 떨림과 오차를 작업의 핵심 요소로 삼는다.</p>
+
+        <p>완벽하게 통제된 결과물보다는 과정에서 발생하는 우연과 변화를 수용하는 태도. 그것이 그의 작업이 말하고자 하는 흔들림의 언어다.</p>
+      </div>
+
+      <div class="toggle-wrap">
+        <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('open'); this.classList.toggle('open'); this.textContent = this.classList.contains('open') ? '작가 이력 닫기 ↑' : '작가 이력 보기 ↓'">
+          작가 이력 보기 ↓
+        </button>
+        <div class="toggle-content">
+          <div class="info-group">
+            <p class="info-label">Education</p>
+            <div class="info-item">
+              <span class="info-year">2019</span>
+              <span>박사, KAIST 산업디자인학과, 대전</span>
+            </div>
+          </div>
+
+          <div class="info-group">
+            <p class="info-label">Experience</p>
+            <div class="info-item">
+              <span class="info-year">2026 –</span>
+              <span>한양대학교 기술경영전문대학원 겸임교수</span>
+            </div>
+            <div class="info-item">
+              <span class="info-year">2022 – 25</span>
+              <span>3D, AI 스타트업 리콘랩스 크리에이티브디렉터</span>
+            </div>
+          </div>
+
+          <div class="info-group">
+            <p class="info-label">Selected Exhibition</p>
+            <div class="info-item">
+              <span class="info-year">2025</span>
+              <span>&lt;PRPT SET : Vault Service II&gt;, 서울 / 성수 WZ스튜디오</span>
+            </div>
+            <div class="info-item">
+              <span class="info-year">2021</span>
+              <span>&lt;ZER01NE Day : Playground&gt;, 서울 / 원효로</span>
+            </div>
+            <div class="info-item">
+              <span class="info-year">2021</span>
+              <span>&lt;내일의 예술전 : 뉴미디어 아트 선정작가 12인&gt;, 예술의전당</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
 
     <footer class="page-foot">
       0과1 사이에서. 김승기 한우현 (2026)
