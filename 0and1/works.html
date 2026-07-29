@@ -39,9 +39,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: var(--pad);
-      text-align: center;
+      padding-top: 48px;
+      padding-bottom: 120px;
     }
     @media (min-width: 480px) {
       .phone-frame {
@@ -51,69 +51,43 @@
         border-radius: 32px;
       }
     }
-    .coming-soon {
-      animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+    .gallery {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .coming-soon .label {
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      font-weight: 300;
-      color: var(--muted);
-      margin-bottom: 16px;
+    .gallery-item {
+      width: 100%;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1), transform 2.8s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .coming-soon .date {
-      font-size: 28px;
-      font-weight: 200;
-      letter-spacing: -0.02em;
-      line-height: 1.4;
-      margin-bottom: 8px;
+    .gallery-item.revealed {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .coming-soon .time {
-      font-size: 14px;
-      font-weight: 200;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-    .coming-soon .divider {
-      width: 24px;
-      height: 1px;
-      background: var(--fg);
-      margin: 28px auto;
-      opacity: 0.3;
-    }
-    .coming-soon .sub {
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .gallery-item img,
+    .gallery-item video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0;
+      filter: grayscale(0.5);
     }
     .page-foot {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
+      width: 100%;
+      text-align: center;
       font-size: 11px;
       color: var(--muted);
       letter-spacing: 0.06em;
-      white-space: nowrap;
-    }
-    @media (max-width: 479px) {
-      .page-foot { bottom: 72px; }
+      padding-top: 48px;
     }
   </style>
 </head>
 <body>
   <div class="phone-frame">
-    <div class="coming-soon">
-      <div class="label">WORKS</div>
-      <div class="date">7월 30일</div>
-      <div class="time">오후 5시 공개됩니다</div>
-      <div class="divider"></div>
-      <div class="sub">전시 작품 이미지를 준비 중입니다</div>
-    </div>
+    <div class="gallery" id="gallery"></div>
     <footer class="page-foot">
       0과1 사이에서. 김승기 한우현 (2026)
     </footer>
@@ -165,5 +139,55 @@
       .nav-pill a { padding: 7px 12px; font-size: 10px; }
     }
   </style>
+
+  <script>
+    const mediaItems = [
+      { type: 'img', src: 'works-images/ms652usp-01_preview.avif' },
+      { type: 'img', src: 'works-images/ms652uss-02_main1.avif' },
+      { type: 'video', src: 'works-images/ms652usu-03_main2.mp4' },
+      { type: 'img', src: 'works-images/ms652ute-04_woohyun1.avif' },
+      { type: 'img', src: 'works-images/ms652ute-05_woohyun2.avif' },
+      { type: 'video', src: 'works-images/ms652ute-06_woohyun2_2.mp4' },
+      { type: 'img', src: 'works-images/ms652utl-07_seungki_fullshot.avif' },
+      { type: 'video', src: 'works-images/ms652uto-08_1_seungki_colorpendul.mp4' },
+      { type: 'img', src: 'works-images/ms652uu1-08_2_seungki_detailshot.avif' },
+      { type: 'video', src: 'works-images/ms652uu2-09_seungki_pendulum01.mp4' },
+      { type: 'video', src: 'works-images/ms652uua-10_seungki_clock1.mp4' },
+      { type: 'img', src: 'works-images/ms652uv7-12_woohyun3.avif' },
+      { type: 'img', src: 'works-images/ms652uvn-13_woohyun3_2.avif' },
+      { type: 'video', src: 'works-images/ms652uvo-14_woohyun3_3.mp4' },
+      { type: 'img', src: 'works-images/ms652uvr-15_woohyun4.avif' },
+      { type: 'img', src: 'works-images/ms652uvs-16_woohyun4_2.avif' },
+      { type: 'img', src: 'works-images/ms652uvt-17_woohyun5.avif' },
+      { type: 'img', src: 'works-images/ms652uvt-18_seungki_partition.avif' },
+    ];
+
+    const gallery = document.getElementById('gallery');
+    mediaItems.forEach((item) => {
+      const div = document.createElement('div');
+      div.className = 'gallery-item';
+      const el = document.createElement(item.type);
+      el.src = item.src;
+      if (item.type === 'video') {
+        el.autoplay = true;
+        el.muted = true;
+        el.loop = true;
+        el.playsinline = true;
+      }
+      div.appendChild(el);
+      gallery.appendChild(div);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.gallery-item').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
