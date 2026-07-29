@@ -169,10 +169,11 @@
       const el = document.createElement(item.type);
       el.src = item.src;
       if (item.type === 'video') {
-        el.autoplay = true;
         el.muted = true;
         el.loop = true;
-        el.playsinline = true;
+        el.setAttribute('playsinline', '');
+        el.setAttribute('autoplay', '');
+        el.play().catch(() => {});
       }
       div.appendChild(el);
       gallery.appendChild(div);
@@ -182,6 +183,8 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('revealed');
+          const vid = entry.target.querySelector('video');
+          if (vid) vid.play().catch(() => {});
           observer.unobserve(entry.target);
         }
       });
