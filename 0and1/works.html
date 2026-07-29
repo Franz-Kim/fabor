@@ -12,13 +12,10 @@
       --fg:      oklch(15% 0 0);
       --muted:   oklch(50% 0 0);
       --border:  oklch(88% 0 0);
-
       --font: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-
       --pad: clamp(20px, 5vw, 32px);
       --phone: 420px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; }
     body {
@@ -33,14 +30,18 @@
       overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
-
     .phone-frame {
       max-width: var(--phone);
       margin: 0 auto;
       min-height: 100vh;
       position: relative;
       background: var(--surface);
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--pad);
+      text-align: center;
     }
     @media (min-width: 480px) {
       .phone-frame {
@@ -50,113 +51,72 @@
         border-radius: 32px;
       }
     }
-
-    img { max-width: 100%; height: auto; display: block; }
-
-    .gallery-wrap {
-      position: relative;
-      padding: 60px var(--pad) 80px;
+    .coming-soon {
+      animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
     }
-
-    .gallery-item {
-      width: 100%;
-      margin-bottom: 48px;
-      position: relative;
-      will-change: transform;
-    }
-
-    .gallery-item .ph-img {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
+    .coming-soon .label {
       font-size: 11px;
+      letter-spacing: 0.12em;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .coming-soon .date {
+      font-size: 28px;
+      font-weight: 200;
+      letter-spacing: -0.02em;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .coming-soon .time {
+      font-size: 14px;
+      font-weight: 200;
+      color: var(--muted);
       letter-spacing: 0.04em;
-      cursor: pointer;
-      transition: opacity 0.4s;
     }
-    .gallery-item .ph-img:hover { opacity: 0.7; }
-
-    .gallery-item.wide { max-width: 100%; }
-    .gallery-item.med { max-width: 82%; margin-left: auto; margin-right: auto; }
-    .gallery-item.narr { max-width: 64%; margin-left: auto; margin-right: auto; }
-
-    .gallery-item.portrait .ph-img { aspect-ratio: 3 / 4; }
-    .gallery-item.landscape .ph-img { aspect-ratio: 4 / 3; }
-    .gallery-item.square .ph-img { aspect-ratio: 1 / 1; }
-
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      background: rgba(0,0,0,0.92);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      cursor: pointer;
+    .coming-soon .divider {
+      width: 24px;
+      height: 1px;
+      background: var(--fg);
+      margin: 28px auto;
+      opacity: 0.3;
     }
-    .lightbox.open {
-      opacity: 1;
-      pointer-events: auto;
+    .coming-soon .sub {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
     }
-    .lightbox img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-
     .page-foot {
-      padding: 40px var(--pad) 40px;
-      text-align: center;
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 11px;
       color: var(--muted);
       letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    @media (max-width: 479px) {
+      .page-foot { bottom: 72px; }
     }
   </style>
 </head>
 <body>
   <div class="phone-frame">
-    <div class="gallery-wrap" id="gallery">
-      <div class="gallery-item portrait narr" data-speed="-0.08">
-        <div class="ph-img">[ 01 ]</div>
-      </div>
-      <div class="gallery-item landscape med" data-speed="0.12">
-        <div class="ph-img">[ 02 ]</div>
-      </div>
-      <div class="gallery-item square wide" data-speed="-0.16">
-        <div class="ph-img">[ 03 ]</div>
-      </div>
-      <div class="gallery-item portrait med" data-speed="0.06">
-        <div class="ph-img">[ 04 ]</div>
-      </div>
-      <div class="gallery-item landscape narr" data-speed="-0.20">
-        <div class="ph-img">[ 05 ]</div>
-      </div>
-      <div class="gallery-item square med" data-speed="0.14">
-        <div class="ph-img">[ 06 ]</div>
-      </div>
-      <div class="gallery-item portrait narr" data-speed="-0.10">
-        <div class="ph-img">[ 07 ]</div>
-      </div>
-      <div class="gallery-item landscape wide" data-speed="0.18">
-        <div class="ph-img">[ 08 ]</div>
-      </div>
+    <div class="coming-soon">
+      <div class="label">WORKS</div>
+      <div class="date">7월 30일</div>
+      <div class="time">오후 5시 공개됩니다</div>
+      <div class="divider"></div>
+      <div class="sub">전시 작품 이미지를 준비 중입니다</div>
     </div>
-
     <footer class="page-foot">
       0과1 사이에서. 김승기 한우현 (2026)
     </footer>
-  </div>
-
-  <div class="lightbox" id="lightbox">
-    <img src="" alt="" id="lightbox-img" />
   </div>
 
   <nav class="nav-pill">
@@ -205,38 +165,5 @@
       .nav-pill a { padding: 7px 12px; font-size: 10px; }
     }
   </style>
-
-  <script>
-    const items = document.querySelectorAll('.gallery-item');
-    const gallery = document.getElementById('gallery');
-
-    function updateParallax() {
-      const rect = gallery.getBoundingClientRect();
-      const center = window.innerHeight / 2;
-      items.forEach(item => {
-        const speed = parseFloat(item.dataset.speed) || 0;
-        const itemRect = item.getBoundingClientRect();
-        const itemCenter = itemRect.top + itemRect.height / 2;
-        const offset = (itemCenter - center) * speed;
-        item.style.transform = `translateY(${offset}px)`;
-      });
-    }
-
-    window.addEventListener('scroll', updateParallax, { passive: true });
-    updateParallax();
-
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lightbox-img');
-    document.querySelectorAll('.gallery-item .ph-img').forEach(el => {
-      el.addEventListener('click', () => {
-        lbImg.src = '';
-        lb.classList.add('open');
-      });
-    });
-    lb.addEventListener('click', () => lb.classList.remove('open'));
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') lb.classList.remove('open');
-    });
-  </script>
 </body>
 </html>
