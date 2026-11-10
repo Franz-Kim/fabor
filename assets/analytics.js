@@ -10,14 +10,40 @@
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-  const cleanUrl = value => {
-    try { const url = new URL(value); return /^https?:$/.test(url.protocol) ? url.origin + url.pathname : ''; }
+  const campaignFields = {
+    utm_id: 'campaign_id',
+    utm_source: 'campaign_source',
+    utm_medium: 'campaign_medium',
+    utm_campaign: 'campaign_name',
+    utm_term: 'campaign_term',
+    utm_content: 'campaign_content'
+  };
+  const campaignConfig = {};
+  const cleanUrl = (value, keepCampaign = false) => {
+    try {
+      const url = new URL(value);
+      if (!/^https?:$/.test(url.protocol)) return '';
+      const clean = new URL(url.origin + url.pathname);
+      if (keepCampaign) {
+        for (const [key, field] of Object.entries(campaignFields)) {
+          const label = url.searchParams.get(key)?.trim();
+          // Preserve marketing labels only. Drop unrelated parameters and fragments.
+          // Do not put contact details in campaign labels; reject email-like values.
+          if (!label || label.length > 100 || /[@\u0000-\u001f\u007f]/.test(label)) continue;
+          clean.searchParams.set(key, label);
+          campaignConfig[field] = label;
+        }
+      }
+      return clean.href;
+    }
     catch { return ''; }
   };
+  const pageLocation = cleanUrl(location.href, true);
   window.gtag('js', new Date());
   window.gtag('config', measurementId, {
+    ...campaignConfig,
     send_page_view: true,
-    page_location: cleanUrl(location.href),
+    page_location: pageLocation,
     page_referrer: cleanUrl(document.referrer),
     page_title: document.title,
     content_group: 'fabor_website',
