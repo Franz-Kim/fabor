@@ -24,6 +24,7 @@
   // An explicit /en/ URL remains usable for readers sharing an English page.
   const language = preference || (current === 'en' || !/^ko(?:-|$)/i.test(primary) ? 'en' : 'ko');
   if (language !== current) {
+    window.FABOR_LANGUAGE_REDIRECT = true;
     const target = new URL((language === 'en' ? 'en/' : '') + page, root);
     target.search = address.search;
     target.hash = address.hash;

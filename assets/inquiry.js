@@ -125,6 +125,7 @@
     document.body.classList.add('locked','inquiry-is-open');
     document.body.style.position='fixed'; document.body.style.top=`-${scrollPosition}px`; document.body.style.width='100%';
     dialog.showModal(); dialog.scrollTop=0;
+    if(!isPreview)document.dispatchEvent(new CustomEvent('fabor:inquiry-open',{detail:{entry}}));
     document.dispatchEvent(new Event('fabor:modal-open'));
     (result.hidden?dialog.querySelector('.inquiry-heading'):result).focus({preventScroll:true});
   }
@@ -220,7 +221,13 @@
     const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Seoul',year:'2-digit',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
     return ['year','month','day'].map(k=>parts.find(p=>p.type===k).value).join('')+'-'+String(++previewSequence).padStart(3,'0');
   }
-  function done(item,ok,reference=''){if(pending!==item)return;cleanupTransport(item);busy(false);item.payload.reference=ok?(isPreview?previewReference():(/^\d{6}-\d{3,}$/.test(reference)?reference:'')):'';showResult(ok,item.payload);}
+  function done(item,ok,reference=''){
+    if(pending!==item)return;
+    cleanupTransport(item);busy(false);
+    item.payload.reference=ok?(isPreview?previewReference():(/^\d{6}-\d{3,}$/.test(reference)?reference:'')):'';
+    showResult(ok,item.payload);
+    if(ok && !isPreview)document.dispatchEvent(new CustomEvent('fabor:inquiry-received',{detail:{entry:item.payload.entry}}));
+  }
   function sendLive(payload){
     if(!config.privacyApproved || !validEndpoint()){busy(false);showResult(false,payload);return;}
     const frame=document.createElement('iframe');frame.name='fabor-receipt-'+uuid();frame.title=t.transport;frame.className='inquiry-transport';frame.tabIndex=-1;frame.setAttribute('aria-hidden','true');
