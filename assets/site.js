@@ -169,6 +169,8 @@ document.addEventListener('visibilitychange', () => {
 reducedMotion.addEventListener('change', () => {
   videos.forEach(video => { if (reducedMotion.matches) pauseVideo(video); else resumeVideo(video); });
 });
+document.addEventListener('fabor:modal-open', () => videos.forEach(pauseVideo));
+document.addEventListener('fabor:modal-close', () => videos.forEach(resumeVideo));
 
 const lightbox = document.getElementById('lightbox');
 if (lightbox && typeof lightbox.showModal === 'function') {
