@@ -24,7 +24,7 @@
     failed:'We could not confirm receipt.', failedBody:'Your message is still here. Copy the details below and email them to FABOR, or try again.',
     copyAll:'Copy all enquiry details', copyEmail:'Copy email address', copied:'Enquiry details copied.', emailCopied:'Email address copied.', copyFailed:'Copy was unavailable. Select and copy the text below.',
     edit:'Edit enquiry', retry:'Try again', new:'Write another enquiry', finish:'Close', reference:'Reference',
-    eventText:'Continue the conversation', eventButton:'Leave an enquiry', dismiss:'Hide event enquiry bar',
+    eventText:'Feel free to enquire about our works and collaborations.', eventButton:'Leave an enquiry', dismiss:'Hide event enquiry bar',
     transport:'Enquiry delivery', copyLabel:'Your complete enquiry', privacyVersion:'Consent version',
     unspecified:'Not specified', previewFailure:'Previewing the failure state. No submission has been attempted.'
   } : {
@@ -49,7 +49,7 @@
     failed:'접수 여부를 확인하지 못했습니다.', failedBody:'작성하신 내용은 그대로 남아 있습니다. 아래 내용을 복사해 이메일로 보내주시거나 다시 시도해 주세요.',
     copyAll:'문의 내용 전체 복사', copyEmail:'이메일 주소 복사', copied:'문의 내용이 복사되었습니다.', emailCopied:'이메일 주소가 복사되었습니다.', copyFailed:'자동으로 복사하지 못했습니다. 아래 내용을 선택해 직접 복사해 주세요.',
     edit:'내용 수정', retry:'다시 시도', new:'새 문의 작성', finish:'닫기', reference:'접수번호',
-    eventText:'작품에 대한 이야기를 이어가세요', eventButton:'문의 남기기', dismiss:'행사 문의 안내 닫기',
+    eventText:'작품과 협업에 대해 편하게 문의해 주세요.', eventButton:'문의 남기기', dismiss:'행사 문의 안내 닫기',
     transport:'문의 전송', copyLabel:'작성한 문의 전체 내용', privacyVersion:'동의 문안 버전',
     unspecified:'미선택', previewFailure:'전송 실패 화면 미리보기입니다. 실제 전송은 시도하지 않았습니다.'
   };

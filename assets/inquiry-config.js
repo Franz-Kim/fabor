@@ -7,7 +7,7 @@ window.FABOR_INQUIRY = {
   privacyVersion: 'inquiry-2026-11-v1',
   retentionMonths: 12, // Retain for 12 months from receipt; see the enquiry information notice.
   event: {
-    enabled: true, // Normal site: false. Important event: true.
+    enabled: true, // 기본 켜짐. 하단 문의 안내를 끄려면 false로 변경하세요.
     id: 'sdf-2026',
     startAt: '', // Optional ISO timestamp with timezone, e.g. YYYY-MM-DDTHH:mm:ss+09:00.
     endAt: '' // Optional exclusive end. Keep blank until the actual schedule is confirmed.
